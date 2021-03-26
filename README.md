@@ -1,4 +1,4 @@
-# BioMe_weight_project
+# Weight Trajectory Classification in a biobank setting
 
 Note: this R script includes codes to classify different types of weight trajectory. 
 However, this is not a program that could run it by itself.
