@@ -41,7 +41,10 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 
 **Figure illustration** 
 
-![stable_weight_illustration.png](/Users/xuj18/Google Drive/course/Postdoc Research/BioMe weight/Manuscript_Xu_AN_MDD_PRS_weight/USEFUL_FILES/stable_weight_illustration.png)
+The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory using the 5% cutoff (could be changed to 10%).
+
+![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
+![supl figure2 stable](https://user-images.githubusercontent.com/65192651/112689182-4f116500-8e50-11eb-944e-4937979eb4e4.png)
 
 ## Weight gain trajectory 
 
