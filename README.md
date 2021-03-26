@@ -44,7 +44,7 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory using the 5% cutoff (could be changed to 10%).
 
 ![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
-
+<h2></h2>
 ![supl_figure2_stable](https://user-images.githubusercontent.com/65192651/112689715-0ad29480-8e51-11eb-9d7b-13637ea357ef.png)
 
 ## Weight gain trajectory 
