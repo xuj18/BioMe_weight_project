@@ -20,13 +20,13 @@ ID2 | 70|2008|etc
 ID2| 60| 2009|etc
 ID2| 65| 2010|etc
 
-## Stable weight trajectory <h2>
+## Stable weight trajectory 
 
 **Definition:** Maximum weight change from first annual weight < 5% or 10%.
 
 **Location in the R script:** line 4-21 
 
-## Weight loss trajectory <h2>
+## Weight loss trajectory 
 
 **Definition:**
 1. The net weight loss over the measured period was > 0
@@ -43,7 +43,7 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 
 ![stable_weight_illustration.png](/Users/xuj18/Google Drive/course/Postdoc Research/BioMe weight/Manuscript_Xu_AN_MDD_PRS_weight/USEFUL_FILES/stable_weight_illustration.png)
 
-## Weight gain trajectory <h2>
+## Weight gain trajectory 
 
 **Definition:**
 1. The net weight gain over the measured period was > 0
