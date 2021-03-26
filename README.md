@@ -4,7 +4,9 @@ Note: this R script includes codes to classify different types of weight traject
 However, this is not a program that could run it by itself.
 Feel free to copy and modify the script to fit your own dataset.
 
-Please cite "xxxx" if you use any of the R code for weight trajectory classification in your cohort/Biobank
+In addition, the PheWAS summary statistics of weight trajectory is included in the tar.gz file
+
+Please cite "xxxx" if you use any of the R code for weight trajectory classification in your cohort/Biobank, or if you used the weight trajectory PheWAS summary statistics in your study
 
 You can plug in your data (replace the your_data dataset, which is a place holder)
 
@@ -26,6 +28,15 @@ ID2| 65| 2010|etc
 
 **Location in the R script:** line 4-21 
 
+**Figure illustration** 
+
+The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory using the 5% cutoff (could be changed to 10%).
+
+![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
+
+![supl_figure2_stable](https://user-images.githubusercontent.com/65192651/112689715-0ad29480-8e51-11eb-9d7b-13637ea357ef.png)
+
+
 ## Weight loss trajectory 
 
 **Definition:**
@@ -39,13 +50,6 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 
 **Location in the R script:** line 27-66
 
-**Figure illustration** 
-
-The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory using the 5% cutoff (could be changed to 10%).
-
-![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
-<h2></h2>
-![supl_figure2_stable](https://user-images.githubusercontent.com/65192651/112689715-0ad29480-8e51-11eb-9d7b-13637ea357ef.png)
 
 ## Weight gain trajectory 
 
