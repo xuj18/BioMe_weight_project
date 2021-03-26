@@ -45,7 +45,9 @@ The figures below give a cartoon illustration and a real example of what is clas
 
 ![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
 
-![supl figure2 stable](https://user-images.githubusercontent.com/65192651/112689182-4f116500-8e50-11eb-944e-4937979eb4e4.png)
+![supl figure2 stable](https://user-images.githubusercontent.com/65192651/112689338-86801180-8e50-11eb-9a21-1e2f4ab7d936.png)
+
+
 
 ## Weight gain trajectory 
 
