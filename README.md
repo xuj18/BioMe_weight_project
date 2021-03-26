@@ -21,14 +21,40 @@ ID2| 60| 2009|etc
 ID2| 65| 2010|etc
 
 ## Stable weight trajectory <h2>
-line 4-21 in the R script
 
+*Definition:* Maximum weight change from first annual weight < 5% or 10%.
+
+*Location in the R script:* line 4-21 
 
 ## Weight loss trajectory <h2>
-line 27-66 in the R script
+
+*Definition:* 
+1. The net weight loss over the measured period was > 0
+1. The maximum weight loss from baseline was ≥ 5% (or 10%)
+1. Overall the individual had more weight loss than weight gain over time 
+   1. The maximum weight gain from baseline was < 5%
+   1. The amount of maximum weight gain from baseline was < 45% of the overall weight change magnitude (maximum annual weight - minimum annual weight)
+   
+If any individual meets all three criteria, then he/she had a weight loss trajectory. *To meet the 3rd criteria, either (i) or (ii) works*
+
+*Location in the R script:* line 27-66
 
 ## Weight gain trajectory <h2>
-line 72-94 in the R script
+
+*Definition:* 
+1. The net weight gain over the measured period was > 0
+1. The maximum weight gain from baseline was ≥ 5% (or 10%)
+1. Overall the individual had more weight gain than weight loss over time 
+   1. The maximum weight loss from baseline was < 5%
+   1. The amount of maximum weight loss from baseline was < 45% of the overall weight change magnitude (maximum annual weight - minimum annual weight)
+   
+If any individual meets all three criteria, then he/she had a weight loss trajectory. *To meet the 3rd criteria, either (i) or (ii) works*
+
+*Location in the R script:* line 72-94 
 
 ## Weight cycle trajectory <h2>
-line 100-794 in the R script
+
+*Definition:* 
+
+*Location in the R script:* line 100-794
+
