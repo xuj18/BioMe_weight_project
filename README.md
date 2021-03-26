@@ -39,6 +39,10 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 
 **Location in the R script:** line 27-66
 
+**Figure illustration** 
+
+![stable_weight](/Users/xuj18/Google Drive/course/Postdoc Research/BioMe weight/Manuscript_Xu_AN_MDD_PRS_weight/USEFUL_FILES/stable_weight_illustration.png)
+
 ## Weight gain trajectory <h2>
 
 **Definition:**
