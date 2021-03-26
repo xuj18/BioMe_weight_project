@@ -28,7 +28,7 @@ ID2| 65| 2010|etc
 
 ## Weight loss trajectory <h2>
 
-**Definition:***
+**Definition:**
 1. The net weight loss over the measured period was > 0
 1. The maximum weight loss from baseline was ≥ 5% (or 10%)
 1. Overall the individual had more weight loss than weight gain over time 
@@ -37,7 +37,7 @@ ID2| 65| 2010|etc
    
 If any individual meets all three criteria, then he/she had a weight loss trajectory. *To meet the 3rd criteria, either (i) or (ii) works*
 
-***Location in the R script:** line 27-66
+**Location in the R script:** line 27-66
 
 ## Weight gain trajectory <h2>
 
