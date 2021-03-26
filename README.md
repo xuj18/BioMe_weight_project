@@ -55,9 +55,9 @@ If any individual meets all three criteria, then he/she had a weight gain trajec
 ## Weight cycle trajectory <h2>
 
 **Definition:**
-1. Local maximum/minimum approach based on inflection points (R script line: 105-349)
-1. Global maximum/minimum approach based on maximum and minimum annual weights per individual (R script line: 353-773)
-   1. When the maximum and minimum annual weights are not both at the two ends of the weight trajectory at the same time (i.e., the first and last annual weights) (R script line: 545-680)
+1. **Local** maximum/minimum approach based on inflection points (R script line: 105-349)
+1. **Global** maximum/minimum approach based on maximum and minimum annual weights per individual (R script line: 353-773)
+   1. When the maximum and minimum annual weights are **not** both at the two ends of the weight trajectory at the same time (i.e., the first and last annual weights) (R script line: 545-680)
    1. When the maximum and minimum annual weights are at the two ends of the weight trajectory at the same time (i.e., the first and last annual weights) (R script line:682-773)
    
 **Location in the R script:** line 100-794
