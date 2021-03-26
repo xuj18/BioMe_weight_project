@@ -21,18 +21,14 @@ ID2| 60| 2009|etc
 ID2| 65| 2010|etc
 
 ## Stable weight trajectory <h2>
-
 line 4-21 in the R script
 
 
 ## Weight loss trajectory <h2>
-
 line 27-66 in the R script
 
 ## Weight gain trajectory <h2>
-
 line 72-94 in the R script
 
 ## Weight cycle trajectory <h2>
-
 line 100-794 in the R script
