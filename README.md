@@ -56,7 +56,7 @@ If any individual meets all three criteria, then he/she had a weight gain trajec
 
 **Location in the R script:** line 72-94 
 
-## Weight cycle trajectory <h2>
+## Weight cycle trajectory 
 
 **Definition:**
 1. **Local** maximum/minimum approach based on inflection points (R script line: 105-349)
