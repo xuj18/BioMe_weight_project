@@ -130,9 +130,9 @@ we then removed the first plateau point out of the set of inflection points and 
 
 ![removal_plateau_points](https://user-images.githubusercontent.com/65192651/112904824-8766ac80-90b7-11eb-8c84-803c43ce08ae.png)
 
-## Sensitivity, Specificity, and Accuracy of this calling algorithm for identifying weight trajectory
+## Sensitivity, specificity, and accuracy of this method to identify weight trajectory in a biobank setting
 
-We drew a random set of 100 participants as a validation set and manually check each of the weight trajectory plot to assess if it has been classified correctly.
+We drew a random set of 100 participants as a validation set and manually checked each of the weight trajectory plots to assess if they have been classified correctly.
 
 Trajectory| Accuracy| Sensitivity|Specificity
 ------------ | -------------| -------------| -------------
