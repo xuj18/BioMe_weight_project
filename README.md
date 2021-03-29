@@ -4,13 +4,13 @@ Note: this R script includes codes to classify different types of weight traject
 However, this is not a program that could run it by itself.
 Feel free to copy and modify the script to fit your own dataset.
 
-In addition, the PheWAS summary statistics of weight trajectory is included in the tar.gz file
+In addition, the PheWAS summary statistics of weight trajectory is included in the tar.gz file.
 
-Please cite "xxxx" if you use any of the R code for weight trajectory classification in your cohort/biobank, or if you use the weight trajectory PheWAS summary statistics in your study
+Please cite "xxxx" if you use any of the R code for weight trajectory classification in your cohort/biobank, or if you use the weight trajectory PheWAS summary statistics in your study.
 
-You can plug in your own dataset (replace the your_data dataset, which is a place holder) to identify weight trajectory for participants in your study cohort
+You can plug in your own dataset (replace the your_data dataset, which is a place holder) to identify weight trajectory for participants in your study cohort.
 
-Your dataset should be organized in a long format (e.g. ID, annual weight value, calendar year, like the example below)
+Your dataset should be organized in a long format (e.g. ID, annual weight value, calendar year, like the example below).
 
 Individual_ID| AnnualKG| YOMeasure|Other variables
 ------------ | -------------| -------------| -------------
