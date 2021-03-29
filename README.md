@@ -30,7 +30,9 @@ ID2| 65| 2010|etc
 
 **Figure illustration** 
 
-The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
+The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%). 
+
+The x axis represents time and the y axis is the weight change in percentage over time. [The x axis label could be ignored.]
 
 ![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
 
@@ -112,6 +114,21 @@ And below is an example that meets the second global weight cycle definition (i.
 1. This does not meet the local weight cycle criteria because even though some weight gain changes between inflection points reached 5%, none of the weight loss between inflection points reached 5%.
 
 ![global_weight_cycle_illustration_2](https://user-images.githubusercontent.com/65192651/112902774-a3b51a00-90b4-11eb-969c-86040fde7f90.png)
+
+
+##QC before identifying the weight trajectory for each individual
+
+![Weight_trajectory_QC_flow](https://user-images.githubusercontent.com/65192651/112904711-54bcb400-90b7-11eb-81d4-ac64c7415bb3.png)
+
+##Additional notes
+
+###How to calculate weight changes in between inflection points if there is a plateau?
+We kept the first plateau point as an inflection point candidate and removed the second plateau point. 
+If the first plateau point turned out not to satisfy the inflection point definition above in (2), 
+we then removed the first plateau point out of the set of inflection points and recalculated the weight changes between the new set of inflection points along with the first and last annual weight measures.
+
+![removal_plateau_points](https://user-images.githubusercontent.com/65192651/112904824-8766ac80-90b7-11eb-8c84-803c43ce08ae.png)
+
 
 ## Reference
 1. Stevens J, Truesdale KP, McClain JE, Cai J. The definition of weight maintenance. International Journal of Obesity 2006; 30: 391–9.
