@@ -43,7 +43,7 @@ The figures below give a cartoon illustration and a real example of what is clas
 1. The net weight loss from the first annual weight to the last annual weight was > 0
 1. The maximum weight loss from baseline was ≥ 5% (or 10%)
 1. Overall the individual had more weight loss than weight gain over time 
-   1. The maximum weight gain from baseline was < 5%
+   1. The maximum weight gain from baseline was < 5% (or 10%)
    1. The amount of maximum weight gain from baseline was < 45% of the overall weight change magnitude (maximum annual weight - minimum annual weight)
    
 If any individual meets all three criteria, then he/she had a weight loss trajectory. *To meet the 3rd criteria, either (i) or (ii) works*
@@ -52,7 +52,7 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 
 The figures below give a cartoon illustration and a real example of what is classified as weight loss trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
 
-The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii). [the x axis label could be ignored.]
+The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii). [The x axis label could be ignored.]
 
 ![weight_loss_illustration](https://user-images.githubusercontent.com/65192651/112894103-72831c80-90a9-11eb-951b-6e856cc886c1.png)
 
@@ -66,7 +66,7 @@ Below is an example of weight loss trajectory in the BioMe Biobank.
 1. The net weight gain from the first annual weight to the last annual weight was > 0
 1. The maximum weight gain from baseline was ≥ 5% (or 10%)
 1. Overall the individual had more weight gain than weight loss over time 
-   1. The maximum weight loss from baseline was < 5%
+   1. The maximum weight loss from baseline was < 5% (or 10%)
    1. The amount of maximum weight loss from baseline was < 45% of the overall weight change magnitude (maximum annual weight - minimum annual weight)
    
 If any individual meets all three criteria, then he/she had a weight gain trajectory. *To meet the 3rd criteria, either (i) or (ii) works*
@@ -75,7 +75,7 @@ If any individual meets all three criteria, then he/she had a weight gain trajec
 
 The figures below give a cartoon illustration and a real example of what is classified as weight gain trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
 
-The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii). [the x axis label could be ignored.]
+The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii). [The x axis label could be ignored.]
 
 ![weight_gain_illustration](https://user-images.githubusercontent.com/65192651/112894362-c68e0100-90a9-11eb-8688-365e627cfd26.png)
 
@@ -92,6 +92,23 @@ Below is an example of weight gain trajectory in the BioMe Biobank.
    1. When the maximum and minimum annual weights are at the two ends of the weight trajectory at the same time (i.e., the first and last annual weights) (R script line:682-773)
    
 **Location in the R script:** line 100-794
+
+This is an example that meets the local weight cycle definition (weight gain and loss ≥ 5% between inflection points). 
+The inflection point was identified based on the slopes (i.e., a positive slope followed by a negative slope, or vice versa).
+
+![local_weight_cycle_illustration](https://user-images.githubusercontent.com/65192651/112898547-f5f33c80-90ae-11eb-9a47-44e06532142e.png)
+
+
+This is an example that meets the first global weight cycle definition (e.g., maximum weight is not at the two ends of the weight trajectory), but not local weight cycle definition.
+1. Maximum annual weight/first annual weight ≥ 5%
+1. Minimum annual weight/maximum annual weight ≤ -5%
+1. None of the weight change between inflection points reached 5%
+
+![global_weight_cycle_illustration_1](https://user-images.githubusercontent.com/65192651/112898562-fc81b400-90ae-11eb-9cfe-259fdedc4783.png)
+
+This is an example that meets the second global weight cycle definition (i.e., maximum and minimum annual weights are at the two ends of the weight trajectory)
+
+
 
 
 ## Reference
