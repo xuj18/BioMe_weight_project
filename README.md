@@ -130,6 +130,18 @@ we then removed the first plateau point out of the set of inflection points and 
 
 ![removal_plateau_points](https://user-images.githubusercontent.com/65192651/112904824-8766ac80-90b7-11eb-8c84-803c43ce08ae.png)
 
+## Sensitivity, Specificity, and Accuracy of this calling algorithm for identifying weight trajectory
+
+We drew a random set of 100 participants as a validation set and manually check each of the weight trajectory plot to assess if it has been classified correctly.
+
+Trajectory| Accuracy| Sensitivity|Specificity
+------------ | -------------| -------------| -------------
+Weight loss| 98%|97.2%| 98.4%
+Weight gain | 99%|97.3%| 100%
+Weight cycle| 98%|98%|98%
+Stable weight| 100%|100%|100%
+
+
 
 ## Reference
 1. Stevens J, Truesdale KP, McClain JE, Cai J. The definition of weight maintenance. International Journal of Obesity 2006; 30: 391–9.
