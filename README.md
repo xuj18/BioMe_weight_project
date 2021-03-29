@@ -6,7 +6,7 @@ Feel free to copy and modify the script to fit your own dataset.
 
 In addition, the PheWAS summary statistics of weight trajectory is included in the tar.gz file
 
-Please cite "xxxx" if you use any of the R code for weight trajectory classification in your cohort/Biobank, or if you used the weight trajectory PheWAS summary statistics in your study
+Please cite "xxxx" if you use any of the R code for weight trajectory classification in your cohort/biobank, or if you use the weight trajectory PheWAS summary statistics in your study
 
 You can plug in your data (replace the your_data dataset, which is a place holder)
 
