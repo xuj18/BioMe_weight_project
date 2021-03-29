@@ -8,7 +8,7 @@ In addition, the PheWAS summary statistics of weight trajectory is included in t
 
 Please cite "xxxx" if you use any of the R code for weight trajectory classification in your cohort/biobank, or if you use the weight trajectory PheWAS summary statistics in your study
 
-You can plug in your data (replace the your_data dataset, which is a place holder)
+You can plug in your own dataset (replace the your_data dataset, which is a place holder) to identify weight trajectory for participants in your study cohort
 
 Your dataset should be organized in a long format (e.g. ID, annual weight value, calendar year, like the example below)
 
@@ -24,7 +24,7 @@ ID2| 65| 2010|etc
 
 ## Stable weight trajectory 
 
-**Definition:** Maximum weight change from first annual weight < 5% or 10%.
+**Definition:** Maximum weight change from first annual weight < 5% or 10%. The cutoff was selected based on previous evidence that a weight change of 5% or more could be clinically relevant [1,2,3].
 
 **Location in the R script:** line 4-21 
 
@@ -73,4 +73,11 @@ If any individual meets all three criteria, then he/she had a weight gain trajec
    1. When the maximum and minimum annual weights are at the two ends of the weight trajectory at the same time (i.e., the first and last annual weights) (R script line:682-773)
    
 **Location in the R script:** line 100-794
+
+
+## Reference
+1. Stevens J, Truesdale KP, McClain JE, Cai J. The definition of weight maintenance. International Journal of Obesity 2006; 30: 391–9.
+1. Blair SN, Shaten J, Brownell K, Collins G, Lissner L. Body weight change, all-cause mortality, and cause-specific mortality in the Multiple Risk Factor Intervention Trial. Ann Intern Med 1993; 119: 749–57.
+1. French SA, Folsom AR, Jeffery RW, Zheng W, Mink PJ, Baxter JE. Weight variability and incident disease in older women: the Iowa Women’s Health Study. International Journal of Obesity 1997; 21: 217–23.
+
 
