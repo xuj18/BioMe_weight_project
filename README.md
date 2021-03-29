@@ -104,15 +104,15 @@ Below is an example that meets the first global weight cycle definition (e.g., m
 1. Minimum annual weight/maximum annual weight ≤ -5%
 1. This does not meet the local weight cycle criteria as none of the weight changes between inflection points reached 5%
 
-![global_weight_cycle_illustration_1](https://user-images.githubusercontent.com/65192651/112898562-fc81b400-90ae-11eb-9cfe-259fdedc4783.png)
+![global_weight_cycle_illustration_1](https://user-images.githubusercontent.com/65192651/112902769-a0ba2980-90b4-11eb-8e28-f8871b224ce5.png)
 
 And below is an example that meets the second global weight cycle definition (i.e., maximum and minimum annual weights are at the two ends of the weight trajectory)
 1. Second maximum annual weight/minimum annual weight ≥ 5%
 1. Second minimum annual weight/second maximum annual weight ≤ -5%
+1. Maximum annual weight/second minimum annual weight ≥ 5%
 1. This does not meet the local weight cycle criteria because even though some weight gain changes between inflection points reached 5%, none of the weight loss between inflection points reached 5%.
 
-![global_weight_cycle_illustration_2](https://user-images.githubusercontent.com/65192651/112902475-2a1d2c00-90b4-11eb-86b1-12eab04b95f5.png)
-
+![global_weight_cycle_illustration_2](https://user-images.githubusercontent.com/65192651/112902774-a3b51a00-90b4-11eb-969c-86040fde7f90.png)
 
 ## Reference
 1. Stevens J, Truesdale KP, McClain JE, Cai J. The definition of weight maintenance. International Journal of Obesity 2006; 30: 391–9.
