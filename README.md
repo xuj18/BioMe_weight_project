@@ -34,7 +34,7 @@ The figures below give a cartoon illustration and a real example of what is clas
 
 ![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
 
-![supl_figure2_stable](https://user-images.githubusercontent.com/65192651/112689715-0ad29480-8e51-11eb-9d7b-13637ea357ef.png)
+![supl figure2 stable](https://user-images.githubusercontent.com/65192651/112895967-cf7fd200-90ab-11eb-9665-a0768d06e013.png)
 
 
 ## Weight loss trajectory 
@@ -52,7 +52,7 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 
 The figures below give a cartoon illustration and a real example of what is classified as weight loss trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
 
-The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii)
+The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii) [the x axis label could be ignored]
 
 ![weight_loss_illustration](https://user-images.githubusercontent.com/65192651/112894103-72831c80-90a9-11eb-951b-6e856cc886c1.png)
 
@@ -71,7 +71,7 @@ If any individual meets all three criteria, then he/she had a weight gain trajec
 
 The figures below give a cartoon illustration and a real example of what is classified as weight gain trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
 
-The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii)
+The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii) [the x axis label could be ignored]
 
 ![weight_gain_illustration](https://user-images.githubusercontent.com/65192651/112894362-c68e0100-90a9-11eb-8688-365e627cfd26.png)
 
