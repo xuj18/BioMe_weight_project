@@ -96,15 +96,14 @@ Below is an example of weight gain trajectory in the BioMe Biobank.
 Below is an example that meets the local weight cycle definition (there is at least one weight gain and one weight loss change ≥ 5% between inflection points). 
 The inflection point was identified based on the slopes (i.e., a positive slope followed by a negative slope, or vice versa).
 
-![local_weight_cycle_illustration](https://user-images.githubusercontent.com/65192651/112898547-f5f33c80-90ae-11eb-9a47-44e06532142e.png)
-
+![local_weight_cycle_illustration](https://user-images.githubusercontent.com/65192651/112903631-c8f65800-90b5-11eb-8d73-8f41ac9f9092.png)
 
 Below is an example that meets the first global weight cycle definition (e.g., maximum weight is not at the two ends of the weight trajectory).
 1. Maximum annual weight/first annual weight ≥ 5%
 1. Minimum annual weight/maximum annual weight ≤ -5%
 1. This does not meet the local weight cycle criteria as none of the weight changes between inflection points reached 5%
 
-![global_weight_cycle_illustration_1](https://user-images.githubusercontent.com/65192651/112902769-a0ba2980-90b4-11eb-8e28-f8871b224ce5.png)
+![global_weight_cycle_illustration_1](https://user-images.githubusercontent.com/65192651/112903624-c693fe00-90b5-11eb-8199-7c7f2ecad235.png)
 
 And below is an example that meets the second global weight cycle definition (i.e., maximum and minimum annual weights are at the two ends of the weight trajectory)
 1. Second maximum annual weight/minimum annual weight ≥ 5%
