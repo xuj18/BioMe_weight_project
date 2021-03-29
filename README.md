@@ -30,7 +30,7 @@ ID2| 65| 2010|etc
 
 **Figure illustration** 
 
-The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory using the 5% cutoff (could be changed to 10%).
+The figures below give a cartoon illustration and a real example of what is classified as stable weight trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
 
 ![stable_weight_illustration](https://user-images.githubusercontent.com/65192651/112688405-35bbe900-8e4f-11eb-9195-913714def58b.png)
 
@@ -40,7 +40,7 @@ The figures below give a cartoon illustration and a real example of what is clas
 ## Weight loss trajectory 
 
 **Definition:**
-1. The net weight loss over the measured period was > 0
+1. The net weight loss from the first annual weight to the last annual weight was > 0
 1. The maximum weight loss from baseline was ≥ 5% (or 10%)
 1. Overall the individual had more weight loss than weight gain over time 
    1. The maximum weight gain from baseline was < 5%
@@ -50,11 +50,16 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 
 **Location in the R script:** line 27-66
 
+The figures below give a cartoon illustration and a real example of what is classified as weight loss trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
+
+The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii)
+
+![weight_loss_illustration](https://user-images.githubusercontent.com/65192651/112894103-72831c80-90a9-11eb-951b-6e856cc886c1.png)
 
 ## Weight gain trajectory 
 
 **Definition:**
-1. The net weight gain over the measured period was > 0
+1. The net weight gain from the first annual weight to the last annual weight was > 0
 1. The maximum weight gain from baseline was ≥ 5% (or 10%)
 1. Overall the individual had more weight gain than weight loss over time 
    1. The maximum weight loss from baseline was < 5%
@@ -63,6 +68,12 @@ If any individual meets all three criteria, then he/she had a weight loss trajec
 If any individual meets all three criteria, then he/she had a weight gain trajectory. *To meet the 3rd criteria, either (i) or (ii) works*
 
 **Location in the R script:** line 72-94 
+
+The figures below give a cartoon illustration and a real example of what is classified as weight gain trajectory in the BioMe Biobank using the 5% cutoff (could be changed to 10%).
+
+The example on the left meets criteria (1), (2) and (3.i), while the example on the right meets criteria (1), (2) and (3.ii)
+
+![weight_gain_illustration](https://user-images.githubusercontent.com/65192651/112894362-c68e0100-90a9-11eb-8688-365e627cfd26.png)
 
 ## Weight cycle trajectory 
 
