@@ -116,13 +116,14 @@ And below is an example that meets the second global weight cycle definition (i.
 ![global_weight_cycle_illustration_2](https://user-images.githubusercontent.com/65192651/112902774-a3b51a00-90b4-11eb-969c-86040fde7f90.png)
 
 
-##QC before identifying the weight trajectory for each individual
+
+## QC before identifying the weight trajectory for each individual
 
 ![Weight_trajectory_QC_flow](https://user-images.githubusercontent.com/65192651/112904711-54bcb400-90b7-11eb-81d4-ac64c7415bb3.png)
 
-##Additional notes
+## Additional notes
 
-###How to calculate weight changes in between inflection points if there is a plateau?
+### How to calculate weight changes in between inflection points if there is a plateau?
 We kept the first plateau point as an inflection point candidate and removed the second plateau point. 
 If the first plateau point turned out not to satisfy the inflection point definition above in (2), 
 we then removed the first plateau point out of the set of inflection points and recalculated the weight changes between the new set of inflection points along with the first and last annual weight measures.
