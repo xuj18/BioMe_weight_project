@@ -116,6 +116,16 @@ And below is an example that meets the second global weight cycle definition (i.
 ![global_weight_cycle_illustration_2](https://user-images.githubusercontent.com/65192651/112902774-a3b51a00-90b4-11eb-969c-86040fde7f90.png)
 
 
+## Sensitivity, specificity, and accuracy of this method to identify weight trajectory in a biobank setting
+
+We drew a random set of 100 participants as a validation set and manually checked each of the weight trajectory plots to assess if they have been classified correctly.
+
+Trajectory| Accuracy| Sensitivity|Specificity
+------------ | -------------| -------------| -------------
+Weight loss| 98%|97.2%| 98.4%
+Weight gain | 99%|97.3%| 100%
+Weight cycle| 98%|98%|98%
+Stable weight| 100%|100%|100%
 
 ## QC before identifying the weight trajectory for each individual
 
@@ -130,16 +140,6 @@ we then removed the first plateau point out of the set of inflection points and 
 
 ![removal_plateau_points](https://user-images.githubusercontent.com/65192651/112904824-8766ac80-90b7-11eb-8c84-803c43ce08ae.png)
 
-## Sensitivity, specificity, and accuracy of this method to identify weight trajectory in a biobank setting
-
-We drew a random set of 100 participants as a validation set and manually checked each of the weight trajectory plots to assess if they have been classified correctly.
-
-Trajectory| Accuracy| Sensitivity|Specificity
------------- | -------------| -------------| -------------
-Weight loss| 98%|97.2%| 98.4%
-Weight gain | 99%|97.3%| 100%
-Weight cycle| 98%|98%|98%
-Stable weight| 100%|100%|100%
 
 
 
