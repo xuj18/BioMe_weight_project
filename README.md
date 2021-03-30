@@ -140,8 +140,17 @@ we then removed the first plateau point out of the set of inflection points and 
 
 ![removal_plateau_points](https://user-images.githubusercontent.com/65192651/112904824-8766ac80-90b7-11eb-8c84-803c43ce08ae.png)
 
+### Why did we use annual weight to identify weight trajectory pattern?
 
+We used annual weight to construct weight trajectory, instead of every single weight measure in the electronic health records for each individual, 
+so as to minimize the influences of any weight outliers that could skew or bias the correct identification of the weight trajectory 
+(e.g., implausible weight values for one individual due to human errors, e.g. typo, scale problem, etc.)
 
+Annual weight was calculated as an average weight in one calendar year per individual, and we found that it did a pretty decent job of capturing the **overall** weight trajectory pattern over years. 
+
+Below is an example of one individual who had 496 weight masures in total and the weight trajectory is still captured very well using annual weights.
+
+![single_weight_vs_annual_weight](https://user-images.githubusercontent.com/65192651/113032554-f991cc80-915d-11eb-8dff-7ea2ae6b59ce.png)
 
 ## Reference
 1. Stevens J, Truesdale KP, McClain JE, Cai J. The definition of weight maintenance. International Journal of Obesity 2006; 30: 391–9.
