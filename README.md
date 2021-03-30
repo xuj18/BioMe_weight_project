@@ -140,7 +140,7 @@ we then removed the first plateau point out of the set of inflection points and 
 
 ![removal_plateau_points](https://user-images.githubusercontent.com/65192651/112904824-8766ac80-90b7-11eb-8c84-803c43ce08ae.png)
 
-### Why did we use annual weight to identify weight trajectory pattern?
+### Why do we use annual weight to identify weight trajectory pattern?
 
 We used annual weight to construct weight trajectory, instead of every single weight measure in the electronic health records for each individual, 
 so as to minimize the influences of any weight outliers that could skew or bias the correct identification of the weight trajectory 
