@@ -129,7 +129,7 @@ Stable weight| 100%|100%|100%
 
 ## QC before identifying the weight trajectory for each individual
 
-![weight_QC_update](https://user-images.githubusercontent.com/65192651/118200809-ff005900-b423-11eb-94e7-7967055c4686.png)
+![weight_QC_update](https://user-images.githubusercontent.com/65192651/118200932-4ab30280-b424-11eb-9506-8c6307af5d10.png)
 
 ## Additional notes
 
