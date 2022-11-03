@@ -1,0 +1,1677 @@
+
+########################################################
+####                     DATASET                    ####
+########################################################
+
+## BioMe participant longitudinal weight data ##
+## path: /sc/arion/projects/rg_psychgen/processed_data/BRSPD_QCd/wt_change/wt9_3annualKG ##
+## 162783 weight measures ##
+
+## BioMe participant with weight data ##
+## path: /sc/arion/projects/rg_psychgen/processed_data/BRSPD_QCd/wt_change/weight_pheno ##
+## 21487 individuals ##
+
+## PheWAS folder ##
+## path: /sc/arion/projects/rg_psychgen/results/xuj18/wt_trajectory_phewas ##
+
+## PRS folder ##
+## path: /sc/arion/projects/rg_psychgen/results/PRS/PRStest_Jiayi
+
+## UKB replication folder ##
+## path: /sc/arion/projects/rg_psychgen/ukb/weight_trajectories
+
+
+################################################################
+####                     SOFTWARE VERSION                   ####
+################################################################
+
+ml R/3.5.3
+
+
+########################################################
+####                     FIGURES                    ####
+########################################################
+
+######################################################################################################
+### Figure 1: Examples of different types of individual weight trajectories based on annual weight ###
+######################################################################################################
+
+# path:  /sc/arion/projects/rg_psychgen/processed_data/BRSPD_QCd/wt_change/
+# in R
+
+wt9_3annualKG <- read.table("wt9_3annualKG",header=T)
+
+library(ggplot2)
+
+# Stable weight 
+wt9_5714<- wt9_3annualKG[which(wt9_3annualKG$IDnum==5714),]
+ggplot(aes(x=YOMeasure,y=annualKG,group=ID), data=wt9_5714) + geom_point() + geom_line() + ylim(55, 85)  + xlab("Year") + ylab("Annual Weight (kg)") + 
+  theme(axis.text=element_text(size=5), axis.title=element_text(size=5,face="bold"))
+  
+# Weight loss
+wt9_7159 <- wt9_3annualKG[which(wt9_3annualKG$IDnum==7159),]
+ggplot(aes(x=YOMeasure,y=annualKG,group=ID), data=wt9_7159) + geom_point() + geom_line() + xlab("Year") + ylab("Annual Weight (kg)") + 
+  theme(axis.text=element_text(size=5), axis.title=element_text(size=5,face="bold"))
+  
+# Weight gain
+wt9_8537 <- wt9_3annualKG[which(wt9_3annualKG$IDnum==8537),]
+ggplot(aes(x=YOMeasure,y=annualKG,group=ID), data=wt9_8537) + geom_point() + geom_line() + ylim(95,135) + scale_x_continuous(breaks = seq(2008, 2018, by = 2)) + 
+  xlab("Year") + ylab("Annual Weight (kg)") + theme(axis.text=element_text(size=5), axis.title=element_text(size=5,face="bold"))
+  
+# Weight cycle
+wt9_12323 <- wt9_3annualKG[which(wt9_3annualKG$IDnum==12323),]
+ggplot(aes(x=YOMeasure,y=annualKG,group=ID), data=wt9_12323) + geom_point() + geom_line() + ylim(90, 130) + scale_x_continuous(breaks = seq(2005, 2018, by = 1)) + 
+  xlab("Year") + ylab("Annual Weight (kg)")+  theme(axis.text=element_text(size=3), axis.title=element_text(size=5,face="bold"))
+
+# Weight cycle + weight loss
+wt9_20808<- wt9_3annualKG[which(wt9_3annualKG$IDnum==20808),]
+ggplot(aes(x=YOMeasure,y=annualKG,group=ID), data=wt9_20808) + geom_point() + geom_line() + xlab("Year") + ylab("Annual Weight (kg)") + 
+  theme(axis.text=element_text(size=5), axis.title=element_text(size=5,face="bold"))
+  
+# Weight cycle + weight gain
+wt9_12863 <- wt9_3annualKG[which(wt9_3annualKG$IDnum==12863),]
+ggplot(aes(x=YOMeasure,y=annualKG,group=ID), data=wt9_12863) + geom_point() + geom_line() + ylim(70,85) + scale_x_continuous(breaks = seq(2009, 2018, by = 1)) + 
+  xlab("Year") + ylab("Annual Weight (kg)")+  theme(axis.text=element_text(size=4), axis.title=element_text(size=5,face="bold"))
+
+
+
+########################################################################################################################################
+### Figure 2: Phenome-wide association plots of weight trajectories with the BioMe Biobank phecodes with the 5% weight change cutoff ###
+########################################################################################################################################
+
+# path: /sc/arion/projects/rg_psychgen/results/xuj18/wt_trajectory_phewas/
+
+# in R
+# install.packages("devtools")
+# devtools::install_github("PheWAS/PheWAS")
+
+library(PheWAS) 
+
+
+new_phewas_dat <- read.table("new_phewas_dat",header=TRUE, sep="\t") 
+new_phewas_dat_female <- read.table("new_phewas_dat_female",header=TRUE, sep="\t") 
+new_phewas_dat_male <- read.table("new_phewas_dat_male",header=TRUE, sep="\t") 
+phewas_cov <- read.table("phewas_cov",header=TRUE, sep="\t") 
+phewas_cov_female <- read.table("phewas_cov_female",header=TRUE, sep="\t") 
+phewas_cov_male <- read.table("phewas_cov_male",header=TRUE, sep="\t") 
+phenotypes_phecode <- read.table("phenotypes_phecode",header=TRUE, sep="\t") 
+
+
+adj_stable_weight_5 =phewas_ext(new_phewas_dat,phenotypes=names(phenotypes_phecode)[-1],genotypes=c("stable_weight_5"), covariates=names(phewas_cov)[-1])
+adj_weight_gain_5 =phewas_ext(new_phewas_dat,phenotypes=names(phenotypes_phecode)[-1],genotypes=c("weight_gain_5"), covariates=names(phewas_cov)[-1])
+adj_weight_loss_5 =phewas_ext(new_phewas_dat,phenotypes=names(phenotypes_phecode)[-1],genotypes=c("weight_loss_5"), covariates=names(phewas_cov)[-1])
+adj_weight_cycle_5 =phewas_ext(new_phewas_dat,phenotypes=names(phenotypes_phecode)[-1],genotypes=c("weight_cycle_5"), covariates=names(phewas_cov)[-1])
+
+# remove X in front of the phecode
+adj_stable_weight_5$phenotype <- substring(adj_stable_weight_5$phenotype, 2)
+adj_weight_gain_5$phenotype <- substring(adj_weight_gain_5$phenotype, 2)
+adj_weight_loss_5$phenotype <- substring(adj_weight_loss_5$phenotype, 2)
+adj_weight_cycle_5$phenotype <- substring(adj_weight_cycle_5$phenotype, 2)
+
+# add phecode description
+adj_stable_weight_5 <- addPhecodeInfo(adj_stable_weight_5)
+adj_weight_gain_5 <- addPhecodeInfo(adj_weight_gain_5)
+adj_weight_loss_5 <- addPhecodeInfo(adj_weight_loss_5)
+adj_weight_cycle_5 <- addPhecodeInfo(adj_weight_cycle_5)
+
+#################################
+#####       5% cutoff      ######
+#################################
+
+adj_stable_weight_5$direction <- ifelse(adj_stable_weight_5$OR>1,1,0)
+pc <-  adj_stable_weight_5$phenotype
+dx <- adj_stable_weight_5$description
+p <- adj_stable_weight_5$p
+group <- adj_stable_weight_5$group
+direction <- adj_stable_weight_5$direction
+annotation <-  adj_stable_weight_5[which(adj_stable_weight_5$phenotype %in% c("278","285","296","401","512","585","782.3")),"phenotype"]
+
+
+adj_weight_gain_5$direction <- ifelse(adj_weight_gain_5$OR>1,1,0)
+pc <-  adj_weight_gain_5$phenotype
+dx <- adj_weight_gain_5$description
+p <- adj_weight_gain_5$p
+group <- adj_weight_gain_5$group
+direction <- adj_weight_gain_5$direction
+annotation <-  adj_weight_gain_5[which(adj_weight_gain_5$phenotype %in% c("278","278.1","278.11","278.4","260","327.32","327.3","512","782.3")),"phenotype"]
+
+
+adj_weight_loss_5$direction <- ifelse(adj_weight_loss_5$OR>1,1,0)
+pc <-  adj_weight_loss_5$phenotype
+dx <- adj_weight_loss_5$description
+p <- adj_weight_loss_5$p
+group <- adj_weight_loss_5$group
+direction <- adj_weight_loss_5$direction
+annotation <-  adj_weight_loss_5[which(adj_weight_loss_5$phenotype %in% c("195","278","278.1","278.11","260","250.2","327.32","327.3","539","569.2","585.32","285","316","569","290.1")),"phenotype"]
+
+
+adj_weight_cycle_5$direction <- ifelse(adj_weight_cycle_5$OR>1,1,0)
+pc <-  adj_weight_cycle_5$phenotype
+dx <- adj_weight_cycle_5$description
+p <- adj_weight_cycle_5$p
+group <- adj_weight_cycle_5$group
+direction <- adj_weight_cycle_5$direction
+annotation <-  adj_weight_cycle_5[which(adj_weight_cycle_5$phenotype %in% c("285","296","296.2","585","278","285","401.3","654","782.3")),"phenotype"]
+
+df <- data.frame(pc, dx, p, group, direction)
+df <- df[order(df$group),]
+for (i in 1:dim(df)[1]) {
+   df$order[i] = i}
+   
+
+library(ggplot2)
+library(ggrepel)
+
+ggplot(df, aes(x=order,y=-log10(p),color=group),show.legend=FALSE)  + scale_y_continuous(breaks = seq(from = 0, to = 80, by = 10)) + coord_cartesian(ylim = c(0,80) )+
+geom_point(data=subset(df, p<(0.05/1135)), aes(col=group, shape=as.factor(direction)), size=1, show.legend=FALSE) + 
+geom_point(data=subset(df, p>=(0.05/1135)), aes(col=group), size=1, shape=19, show.legend=FALSE) + 
+theme_classic()  + scale_color_manual(values=c("#99CCFF", "#CCCCFF", "#FFCCFF", "#FF99FF", "#FF99CC", "#CC99CC", "#996699", "#FF3399", "#FF6666", "#FF3333", "#00CCCC", "#336666", "#009999", "#003333", "#3366CC", "#0099CC", "#9900FF")) +
+theme(legend.position="none", axis.text.x = element_blank(),axis.title.x=element_blank(), axis.ticks.x=element_blank(),axis.text.y=element_text(size=5, face="bold"), axis.title.y= element_text(size=5, face="bold"))   + 
+geom_hline(yintercept=-log10(0.05/1135),linetype="dashed",color="tomato3")  + 
+geom_text_repel(data=subset(df, pc %in% annotation), aes(label=dx), size=1.5) + scale_shape_manual(values=c(25, 24))
+
+
+############################################################################################################################################################
+###    Figure 3: Associations of anorexia nervosa and depression with weight trajectories in participants with European ancestry in the BioMe Biobank    ###
+############################################################################################################################################################
+
+# path: /sc/arion/projects/rg_psychgen/results/PRS/PRStest_Jiayi/
+
+# PRSice to get the AN PRS score on weight trajectories
+
+module load R
+
+##### 5 % cutoff ####
+
+# stable
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA  --perm 10000 \
+--beta --pheno stable_weight_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out stable_weight_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+# gain
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA --perm 10000 \
+--beta --pheno weight_gain_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out  weight_gain_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+# loss
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA --perm 10000 \
+--beta --pheno weight_loss_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out weight_loss_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+# cycle
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA  --perm 10000 \
+--beta --pheno weight_cycle_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out weight_cycle_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+
+##### 10 % cutoff ####
+
+# stable
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA --perm 10000 \
+--beta --pheno stable_weight_10_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out stable_weight_10_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+# gain
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA --perm 10000 \
+--beta --pheno weight_gain_10_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out weight_gain_10_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+# loss
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA --perm 10000 \
+--beta --pheno weight_loss_10_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out weight_loss_10_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+# cycle
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA --perm 10000 \
+--beta --pheno weight_cycle_10_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out weight_cycle_10_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10  --print-snp
+
+
+ml R/3.5.3
+
+# R
+
+####  load the PRS score  #####
+
+
+an_prs_stable_wt_5 <- read.table('stable_weight_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+an_prs_stable_wt_10 <- read.table('stable_weight_10_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+
+an_prs_wt_gain_5 <- read.table('weight_gain_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+an_prs_wt_gain_10 <- read.table('weight_gain_10_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+
+an_prs_wt_loss_5 <- read.table('weight_loss_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+an_prs_wt_loss_10 <- read.table('weight_loss_10_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+
+an_prs_wt_cycle_5 <- read.table('weight_cycle_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+an_prs_wt_cycle_10 <- read.table('weight_cycle_10_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+
+# sens means that they used stable weight as the controls, instead of using all other weight trajectories as the controls
+# nonclin means that individuals with AN and/or MDD were excluded
+# encounter means the number of hospital encounters per person was included as a covariate
+# within EUR means it is an PRS analysis within the European ancestry group
+
+
+####  load the weight trajectory and covariate information   #####
+weight_pheno <- read.table("weight_pheno",header=TRUE)
+
+
+
+### the script below use weight loss 5% as an example (could be applied to other weight trajectories)
+
+# prep the dataset for PRS linear regression 
+
+an_prs_wt_loss_5 <- an_prs_wt_loss_5[which(an_prs_wt_loss_5[,3]=="Yes"),]
+colnames(an_prs_wt_loss_5)[colnames(an_prs_wt_loss_5)=="FID"] <- "ID"
+an_prs_wt_loss_5 <- an_prs_wt_loss_5[,c(1,4)]
+
+# get the phenotype information
+pheno_wt_loss_5 <- weight_pheno[which(weight_pheno$ID %in% an_prs_wt_loss_5[,1]),]
+
+# merge the weight trajectory with PRS
+an_pheno_prs_wt_loss_5 <- merge(pheno_wt_loss_5,an_prs_wt_loss_5, by="ID")
+
+# make PRS deciles 
+library(StatMeasures)
+an_pheno_prs_wt_loss_5$decile_prs <- decile(vector = an_pheno_prs_wt_loss_5$PRS, decreasing = FALSE)
+
+
+
+
+### PRS analysis
+### AN PRS
+
+########################
+### stable weight 5% ###
+########################
+an_stable_wt_5_glm <- glm(stable_weight_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_stable_wt_5,family=binomial)
+summary(an_stable_wt_5_glm)
+coef_an_stable_wt_5_glm <- as.data.frame(exp(coef(an_stable_wt_5_glm)))
+CI95_an_stable_wt_5_glm <- as.data.frame(exp(confint(an_stable_wt_5_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_stable_wt_5 <- cbind(decile_prs,coef_an_stable_wt_5_glm[c(2:10),], CI95_an_stable_wt_5_glm[c(2:10),])
+colnames(plotOR_an_stable_wt_5)[colnames(plotOR_an_stable_wt_5)=="coef_an_stable_wt_5_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_stable_wt_5)[colnames(plotOR_an_stable_wt_5)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_stable_wt_5)[colnames(plotOR_an_stable_wt_5)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_stable_wt_5) <- NULL
+
+library(tidyverse)
+plotOR_an_stable_wt_5 <- plotOR_an_stable_wt_5 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_stable_wt_5  <- plotOR_an_stable_wt_5[order(plotOR_an_stable_wt_5$decile_prs),]
+plotOR_an_stable_wt_5
+
+#########################
+### stable weight 10% ###
+#########################
+
+an_stable_wt_10_glm <- glm(stable_weight_10 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_stable_wt_10,family=binomial)
+summary(an_stable_wt_10_glm)
+coef_an_stable_wt_10_glm <- as.data.frame(exp(coef(an_stable_wt_10_glm)))
+CI95_an_stable_wt_10_glm <- as.data.frame(exp(confint(an_stable_wt_10_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_stable_wt_10 <- cbind(decile_prs,coef_an_stable_wt_10_glm[c(2:10),], CI95_an_stable_wt_10_glm[c(2:10),])
+colnames(plotOR_an_stable_wt_10)[colnames(plotOR_an_stable_wt_10)=="coef_an_stable_wt_10_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_stable_wt_10)[colnames(plotOR_an_stable_wt_10)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_stable_wt_10)[colnames(plotOR_an_stable_wt_10)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_stable_wt_10) <- NULL
+
+library(tidyverse)
+plotOR_an_stable_wt_10 <- plotOR_an_stable_wt_10 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_stable_wt_10  <- plotOR_an_stable_wt_10[order(plotOR_an_stable_wt_10$decile_prs),]
+plotOR_an_stable_wt_10
+
+#########################
+###   weight gain 5%  ###
+#########################
+
+an_wt_gain_5_glm <- glm(weight_gain_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_gain_5,family=binomial)
+summary(an_wt_gain_5_glm)
+coef_an_wt_gain_5_glm <- as.data.frame(exp(coef(an_wt_gain_5_glm)))
+CI95_an_wt_gain_5_glm <- as.data.frame(exp(confint(an_wt_gain_5_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_gain_5 <- cbind(decile_prs,coef_an_wt_gain_5_glm[c(2:10),], CI95_an_wt_gain_5_glm[c(2:10),])
+colnames(plotOR_an_wt_gain_5)[colnames(plotOR_an_wt_gain_5)=="coef_an_wt_gain_5_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_gain_5)[colnames(plotOR_an_wt_gain_5)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_gain_5)[colnames(plotOR_an_wt_gain_5)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_gain_5) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_gain_5 <- plotOR_an_wt_gain_5 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_gain_5  <- plotOR_an_wt_gain_5[order(plotOR_an_wt_gain_5$decile_prs),]
+plotOR_an_wt_gain_5
+
+ggplot(plotOR_an_wt_gain_5, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+ geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,3)  +
+theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"))
+
+
+##########################
+###   weight gain 10%  ###
+##########################
+
+an_wt_gain_10_glm <- glm(weight_gain_10 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_gain_10,family=binomial)
+summary(an_wt_gain_10_glm)
+coef_an_wt_gain_10_glm <- as.data.frame(exp(coef(an_wt_gain_10_glm)))
+CI95_an_wt_gain_10_glm <- as.data.frame(exp(confint(an_wt_gain_10_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_gain_10 <- cbind(decile_prs,coef_an_wt_gain_10_glm[c(2:10),], CI95_an_wt_gain_10_glm[c(2:10),])
+colnames(plotOR_an_wt_gain_10)[colnames(plotOR_an_wt_gain_10)=="coef_an_wt_gain_10_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_gain_10)[colnames(plotOR_an_wt_gain_10)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_gain_10)[colnames(plotOR_an_wt_gain_10)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_gain_10) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_gain_10 <- plotOR_an_wt_gain_10 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_gain_10  <- plotOR_an_wt_gain_10[order(plotOR_an_wt_gain_10$decile_prs),]
+plotOR_an_wt_gain_10
+
+ggplot(plotOR_an_wt_gain_10, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+ geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,3)  +
+theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"))
+
+
+##########################
+###   weight loss 5%  ###
+##########################
+
+#decile as predictor
+an_wt_loss_5_glm <- glm(weight_loss_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_loss_5,family=binomial)
+summary(an_wt_loss_5_glm)
+coef_an_wt_loss_5_glm <- as.data.frame(exp(coef(an_wt_loss_5_glm)))
+CI95_an_wt_loss_5_glm <- as.data.frame(exp(confint(an_wt_loss_5_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_5 <- cbind(decile_prs,coef_an_wt_loss_5_glm[c(2:10),], CI95_an_wt_loss_5_glm[c(2:10),])
+colnames(plotOR_an_wt_loss_5)[colnames(plotOR_an_wt_loss_5)=="coef_an_wt_loss_5_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_5)[colnames(plotOR_an_wt_loss_5)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_5)[colnames(plotOR_an_wt_loss_5)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_5) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_5 <- plotOR_an_wt_loss_5 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_5  <- plotOR_an_wt_loss_5[order(plotOR_an_wt_loss_5$decile_prs),]
+plotOR_an_wt_loss_5
+
+library(ggplot2)
+
+#tiff("plotOR_prs_wt_loss_5.tiff")
+ggplot(plotOR_an_wt_loss_5, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+
+geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,3)  + xlab("AN-PRS Decile with Weight Loss Trajectory")+theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))
+#dev.off()
+
+
+###########################
+###   weight loss 10 %  ###
+###########################
+
+an_wt_loss_10_glm <- glm(weight_loss_10 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_loss_10,family=binomial)
+summary(an_wt_loss_10_glm)
+coef_an_wt_loss_10_glm <- as.data.frame(exp(coef(an_wt_loss_10_glm)))
+CI95_an_wt_loss_10_glm <- as.data.frame(exp(confint(an_wt_loss_10_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_10 <- cbind(decile_prs,coef_an_wt_loss_10_glm[c(2:10),], CI95_an_wt_loss_10_glm[c(2:10),])
+colnames(plotOR_an_wt_loss_10)[colnames(plotOR_an_wt_loss_10)=="coef_an_wt_loss_10_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_10)[colnames(plotOR_an_wt_loss_10)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_10)[colnames(plotOR_an_wt_loss_10)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_10) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_10 <- plotOR_an_wt_loss_10 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_10  <- plotOR_an_wt_loss_10[order(plotOR_an_wt_loss_10$decile_prs),]
+plotOR_an_wt_loss_10
+
+ggplot(plotOR_an_wt_loss_10, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+ geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,3)  +
+theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"))
+
+
+##########################
+###   weight cycle 5%  ###
+##########################
+
+an_wt_cycle_5_glm <- glm(weight_cycle_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_cycle_5,family=binomial)
+summary(an_wt_cycle_5_glm)
+coef_an_wt_cycle_5_glm <- as.data.frame(exp(coef(an_wt_cycle_5_glm)))
+CI95_an_wt_cycle_5_glm <- as.data.frame(exp(confint(an_wt_cycle_5_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_cycle_5 <- cbind(decile_prs,coef_an_wt_cycle_5_glm[c(2:10),], CI95_an_wt_cycle_5_glm[c(2:10),])
+colnames(plotOR_an_wt_cycle_5)[colnames(plotOR_an_wt_cycle_5)=="coef_an_wt_cycle_5_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_cycle_5)[colnames(plotOR_an_wt_cycle_5)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_cycle_5)[colnames(plotOR_an_wt_cycle_5)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_cycle_5) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_cycle_5 <- plotOR_an_wt_cycle_5 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_cycle_5  <- plotOR_an_wt_cycle_5[order(plotOR_an_wt_cycle_5$decile_prs),]
+plotOR_an_wt_cycle_5
+
+###########################
+###   weight cycle 10%  ###
+###########################
+
+an_wt_cycle_10_glm <- glm(weight_cycle_10 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_cycle_10,family=binomial)
+summary(an_wt_cycle_10_glm)
+coef_an_wt_cycle_10_glm <- as.data.frame(exp(coef(an_wt_cycle_10_glm)))
+CI95_an_wt_cycle_10_glm <- as.data.frame(exp(confint(an_wt_cycle_10_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_cycle_10 <- cbind(decile_prs,coef_an_wt_cycle_10_glm[c(2:10),], CI95_an_wt_cycle_10_glm[c(2:10),])
+colnames(plotOR_an_wt_cycle_10)[colnames(plotOR_an_wt_cycle_10)=="coef_an_wt_cycle_10_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_cycle_10)[colnames(plotOR_an_wt_cycle_10)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_cycle_10)[colnames(plotOR_an_wt_cycle_10)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_cycle_10) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_cycle_10 <- plotOR_an_wt_cycle_10 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_cycle_10  <- plotOR_an_wt_cycle_10[order(plotOR_an_wt_cycle_10$decile_prs),]
+plotOR_an_wt_cycle_10
+
+
+
+### compile the data for the ggplot ###
+
+model <- c("AN_stable_weight_5","AN_stable_weight_10","AN_weight_gain_5","AN_weight_gain_10","AN_weight_loss_5","AN_weight_loss_10","AN_weight_cycle_5","AN_weight_cycle_10","Depression_stable_weight_5","Depression_stable_weight_10","Depression_weight_gain_5","Depression_weight_gain_10","Depression_weight_loss_5","Depression_weight_loss_10","Depression_weight_cycle_5","Depression_weight_cycle_10","Obesity_stable_weight_5","Obesity_stable_weight_10","Obesity_weight_gain_5","Obesity_weight_gain_10","Obesity_weight_loss_5","Obesity_weight_loss_10","Obesity_weight_cycle_5","Obesity_weight_cycle_10")
+dx_outcome <-c(rep("AN",8),rep("Depression",8),rep("Obesity",8))
+cutoff <- rep(c("5%","10%"),12)
+#Adjustment <- c("Original","With Depression Adjustment","With Obesity Adjustment","Original","With AN Adjustment","With Obesity Adjustment","Original","With AN Adjustment","With Depression Adjustment")
+model <- factor(model, as.character(model)) #set it as character
+data <- rbind(plotOR_an_stable_wt_5[10,c(2:4)],plotOR_an_stable_wt_10[10,c(2:4)],plotOR_an_wt_gain_5[10,c(2:4)],plotOR_an_wt_gain_10[10,c(2:4)],plotOR_an_wt_loss_5[10,c(2:4)],plotOR_an_wt_loss_10[10,c(2:4)],plotOR_an_wt_cycle_5[10,c(2:4)],plotOR_an_wt_cycle_10[10,c(2:4)],plotOR_mdd_stable_wt_5[10,c(2:4)],plotOR_mdd_stable_wt_10[10,c(2:4)], plotOR_mdd_wt_gain_5[10,c(2:4)],plotOR_mdd_wt_gain_10[10,c(2:4)], plotOR_mdd_wt_loss_5[10,c(2:4)],plotOR_mdd_wt_loss_10[10,c(2:4)], plotOR_mdd_wt_cycle_5[10,c(2:4)],plotOR_mdd_wt_cycle_10[10,c(2:4)],plotOR_ob_stable_wt_5[10,c(2:4)],plotOR_ob_stable_wt_10[10,c(2:4)],plotOR_ob_wt_gain_5[10,c(2:4)],plotOR_ob_wt_gain_10[10,c(2:4)],  plotOR_ob_wt_loss_5[10,c(2:4)],plotOR_ob_wt_loss_10[10,c(2:4)],plotOR_ob_wt_cycle_5[10,c(2:4)],plotOR_ob_wt_cycle_10[10,c(2:4)])
+figure2_PRS_forest <- data.frame(model,dx_outcome,cutoff,data)
+figure2_PRS_forest$model <- factor(figure2_PRS_forest$model,  levels=c("AN_stable_weight_5","AN_stable_weight_10","AN_weight_gain_5","AN_weight_gain_10","AN_weight_loss_5","AN_weight_loss_10","AN_weight_cycle_5","AN_weight_cycle_10","Depression_stable_weight_5","Depression_stable_weight_10","Depression_weight_gain_5","Depression_weight_gain_10","Depression_weight_loss_5","Depression_weight_loss_10","Depression_weight_cycle_5","Depression_weight_cycle_10","Obesity_stable_weight_5","Obesity_stable_weight_10","Obesity_weight_gain_5","Obesity_weight_gain_10","Obesity_weight_loss_5","Obesity_weight_loss_10","Obesity_weight_cycle_5","Obesity_weight_cycle_10"))
+
+
+
+##############################################################################
+####    Plot the PRS association with weight trajectory   (left panel)    ####
+##############################################################################
+
+library(ggplot2)
+library(dplyr)
+
+ggplot(figure2_PRS_forest, aes(x=OR, y=factor(model), colour=dx_outcome,shape=cutoff)) +  theme_bw()  +
+    	geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_weight_loss_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "pink2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_weight_loss_5"),size=2) +
+   		geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_weight_loss_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "pink2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_weight_loss_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_weight_gain_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,,width = 0.2, color = "palevioletred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_weight_gain_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_weight_gain_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "palevioletred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_weight_gain_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_weight_cycle_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "orchid2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_weight_cycle_5"),size=2) +
+   		geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_weight_cycle_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "orchid2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_weight_cycle_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_stable_weight_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,,width = 0.2, color = "violetred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_stable_weight_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "AN_stable_weight_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "violetred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "AN_stable_weight_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_weight_loss_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2,color = "seagreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_weight_loss_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_weight_loss_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2,color = "seagreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_weight_loss_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_weight_gain_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "darkolivegreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_weight_gain_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_weight_gain_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "darkolivegreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_weight_gain_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_weight_cycle_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2,color = "chartreuse2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_weight_cycle_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_weight_cycle_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2,color = "chartreuse2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_weight_cycle_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_stable_weight_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "forestgreen",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_stable_weight_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Depression_stable_weight_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "forestgreen",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Depression_stable_weight_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_weight_loss_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "cadetblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_weight_loss_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_weight_loss_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "cadetblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_weight_loss_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_weight_gain_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "deepskyblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_weight_gain_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_weight_gain_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "deepskyblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_weight_gain_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_weight_cycle_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "dodgerblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_weight_cycle_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_weight_cycle_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "dodgerblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_weight_cycle_10"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_stable_weight_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "royalblue4",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_stable_weight_5"),size=2) +
+        geom_errorbar(data = filter(figure2_PRS_forest, model == "Obesity_stable_weight_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,, width = 0.2, color = "royalblue4",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_PRS_forest,  model == "Obesity_stable_weight_10"),size=2) +
+    coord_cartesian(xlim=c(0, 6))   +theme(legend.position = "none") + 
+    labs(x = "OR of Top vs Bottom 10% PRS on Weight Trajectory") + 
+    scale_y_discrete(limits = rev(levels(model))) +  geom_vline(aes(xintercept = 1), size = 0.5, linetype = "dashed") +
+    theme(axis.text=element_text(size=5,face="bold"),  axis.title.x=element_text(size=5,face="bold"),  axis.title.y=element_blank()) 
+
+
+
+##########################################################################################
+####    plot the disease phecode association with weight trajectory  (right panel)    ####
+##########################################################################################
+
+# data prep for the figure 
+
+phecode_icd10 <- read.table("phecode_icd10_biome", header=TRUE) # disease phecode
+weight_pheno <- read.table("weight_pheno",header=TRUE) # weight trajectory
+geno_list <- read.table("/sc/arion/projects/H_rg_psychgen/results/PRS/PRStest_Jiayi/GSA_EURonly.final.QC.pptlist") # number of EUR individuals with genotype data
+number_encounter_per_ppt_step3 <- read.table("biome_encounter_times",header=TRUE)  # hospital encounter counts
+alcohol <- read.table("/sc/arion/projects/H_rg_psychgen/processed_data/BRSPD_QCd/smk_alc/alcohol_use",header=TRUE) # alcohol use
+smk <- read.table("/sc/arion/projects/H_rg_psychgen/processed_data/BRSPD_QCd/smk_alc/ever_smoking",header=TRUE) # smoking status
+
+
+colnames(phecode_icd10)[colnames(phecode_icd10)=="id"] <- "ID"
+phecode_icd10_for_fig2 <- phecode_icd10[,c("ID","305.21","305.2","296.2","296.22","278.1")]
+
+# combine the disease phecode with weight trajectory
+pheno_fig2 <- merge(weight_pheno,phecode_icd10_for_fig2,by="ID")
+
+# limit to only those EUR individuals with genotype data
+pheno_fig2_eur <- pheno_fig2[which(pheno_fig2[,1] %in% geno_list[,1]), ] #6082 ppts
+
+# merge with hospital encounter counts, alcohol use and smoking status
+
+pheno_fig2_eur2 <- merge(pheno_fig2_eur,number_encounter_per_ppt_step3,by="ID")
+pheno_fig2_eur3 <- merge(pheno_fig2_eur2,smk,by="ID")
+
+colnames(alcohol)[colnames(alcohol)=="bio_r_spd_id"]  <-  "ID"
+pheno_fig2_eur4 <- merge(pheno_fig2_eur3,alcohol,by="ID")
+
+#6060 ppts with 49 columns
+
+colnames(pheno_fig2_eur4)[colnames(pheno_fig2_eur4)=="305.21"] <- "AN"
+colnames(pheno_fig2_eur4)[colnames(pheno_fig2_eur4)=="305.2"] <- "ED"
+colnames(pheno_fig2_eur4)[colnames(pheno_fig2_eur4)=="296.2"] <- "depression"
+colnames(pheno_fig2_eur4)[colnames(pheno_fig2_eur4)=="296.22"] <- "MDD"
+colnames(pheno_fig2_eur4)[colnames(pheno_fig2_eur4)=="278.1"] <- "obesity"
+
+
+stable_weight_5_dat <- pheno_fig2_eur4
+stable_weight_10_dat <- pheno_fig2_eur4
+
+weight_gain_5_dat <- pheno_fig2_eur4[which(pheno_fig2_eur4$weight_gain_5==1|pheno_fig2_eur4$stable_weight_5==1),]
+weight_gain_10_dat <- pheno_fig2_eur4[which(pheno_fig2_eur4$weight_gain_10==1|pheno_fig2_eur4$stable_weight_10==1),]
+
+weight_loss_5_dat <- pheno_fig2_eur4[which(pheno_fig2_eur4$weight_loss_5==1|pheno_fig2_eur4$stable_weight_5==1),]
+weight_loss_10_dat <- pheno_fig2_eur4[which(pheno_fig2_eur4$weight_loss_10==1|pheno_fig2_eur4$stable_weight_10==1),]
+
+weight_cycle_5_dat <- pheno_fig2_eur4[which(pheno_fig2_eur4$weight_cycle_5==1|pheno_fig2_eur4$stable_weight_5==1),]
+weight_cycle_10_dat <- pheno_fig2_eur4[which(pheno_fig2_eur4$weight_cycle_10==1|pheno_fig2_eur4$stable_weight_10==1),]
+
+
+ED_stable_5 <- glm(stable_weight_5 ~ ED  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=stable_weight_5_dat , family = "binomial")
+summary(ED_stable_5)
+ED_stable_10 <- glm(stable_weight_10 ~ ED  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=stable_weight_10_dat , family = "binomial")
+summary(ED_stable_10)
+
+ED_gain_5 <- glm(weight_gain_5 ~ ED  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_gain_5_dat , family = "binomial")
+summary(ED_gain_5)
+ED_gain_10 <- glm(weight_gain_10 ~ ED  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_gain_10_dat , family = "binomial")
+summary(ED_gain_10)
+
+ED_loss_5 <- glm(weight_loss_5 ~ ED + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_loss_5_dat , family = "binomial")
+summary(ED_loss_5)
+ED_loss_10 <- glm(weight_loss_10 ~ ED  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_loss_10_dat , family = "binomial")
+summary(ED_loss_10)
+
+ED_cycle_5 <- glm(weight_cycle_5 ~ ED + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_cycle_5_dat , family = "binomial")
+summary(ED_cycle_5)
+ED_cycle_10 <- glm(weight_cycle_10 ~ ED  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_cycle_10_dat , family = "binomial")
+summary(ED_cycle_10)
+
+
+
+depression_stable_5 <- glm(stable_weight_5 ~ depression  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=stable_weight_5_dat , family = "binomial")
+summary(depression_stable_5)
+depression_stable_10 <- glm(stable_weight_10 ~ depression  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=stable_weight_10_dat , family = "binomial")
+summary(depression_stable_10)
+
+depression_gain_5 <- glm(weight_gain_5 ~ depression + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_gain_5_dat , family = "binomial")
+summary(depression_gain_5)
+depression_gain_10 <- glm(weight_gain_10 ~ depression  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_gain_10_dat , family = "binomial")
+summary(depression_gain_10)
+
+depression_loss_5 <- glm(weight_loss_5 ~ depression + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_loss_5_dat , family = "binomial")
+summary(depression_loss_5)
+depression_loss_10 <- glm(weight_loss_10 ~ depression  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_loss_10_dat , family = "binomial")
+summary(depression_loss_10)
+
+depression_cycle_5 <- glm(weight_cycle_5 ~ depression + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_cycle_5_dat , family = "binomial")
+summary(depression_cycle_5)
+depression_cycle_10 <- glm(weight_cycle_10 ~ depression  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_cycle_10_dat , family = "binomial")
+summary(depression_cycle_10)
+
+
+
+obesity_stable_5 <- glm(stable_weight_5 ~ obesity  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=stable_weight_5_dat , family = "binomial")
+summary(obesity_stable_5)
+obesity_stable_10 <- glm(stable_weight_10 ~ obesity  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=stable_weight_10_dat , family = "binomial")
+summary(obesity_stable_10)
+
+obesity_gain_5 <- glm(weight_gain_5 ~ obesity + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_gain_5_dat , family = "binomial")
+summary(obesity_gain_5)
+obesity_gain_10 <- glm(weight_gain_10 ~ obesity  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_gain_10_dat , family = "binomial")
+summary(obesity_gain_10)
+
+obesity_loss_5 <- glm(weight_loss_5 ~ obesity + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_loss_5_dat , family = "binomial")
+summary(obesity_loss_5)
+obesity_loss_10 <- glm(weight_loss_10 ~ obesity  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_loss_10_dat , family = "binomial")
+summary(obesity_loss_10)
+
+obesity_cycle_5 <- glm(weight_cycle_5 ~ obesity + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_cycle_5_dat , family = "binomial")
+summary(obesity_cycle_5)
+obesity_cycle_10 <- glm(weight_cycle_10 ~ obesity  + SEX  + first_annualKG_age + age2 + first_annualBMI + encounter_times + ever_smoker + alcohol_user, data=weight_cycle_10_dat , family = "binomial")
+summary(obesity_cycle_10)
+
+
+
+
+ED_stable_5_beta <- coef(summary(ED_stable_5))[2,1] 
+ED_stable_5_SE <- coef(summary(ED_stable_5))[2,2] 
+ED_stable_5_OR <-  exp(ED_stable_5_beta)
+ED_stable_5_OR_upperCI <- exp(ED_stable_5_beta + 1.96*ED_stable_5_SE)
+ED_stable_5_OR_lowerCI <- exp(ED_stable_5_beta - 1.96*ED_stable_5_SE)
+
+ED_stable_10_beta <- coef(summary(ED_stable_10))[2,1] 
+ED_stable_10_SE <- coef(summary(ED_stable_10))[2,2] 
+ED_stable_10_OR <-  exp(ED_stable_10_beta)
+ED_stable_10_OR_upperCI <- exp(ED_stable_10_beta + 1.96*ED_stable_10_SE)
+ED_stable_10_OR_lowerCI <- exp(ED_stable_10_beta - 1.96*ED_stable_10_SE)
+
+ED_gain_5_beta <- coef(summary(ED_gain_5))[2,1] 
+ED_gain_5_SE <- coef(summary(ED_gain_5))[2,2] 
+ED_gain_5_OR <-  exp(ED_gain_5_beta)
+ED_gain_5_OR_upperCI <- exp(ED_gain_5_beta + 1.96*ED_gain_5_SE)
+ED_gain_5_OR_lowerCI <- exp(ED_gain_5_beta - 1.96*ED_gain_5_SE)
+
+ED_gain_10_beta <- coef(summary(ED_gain_10))[2,1] 
+ED_gain_10_SE <- coef(summary(ED_gain_10))[2,2] 
+ED_gain_10_OR <-  exp(ED_gain_10_beta)
+ED_gain_10_OR_upperCI <- exp(ED_gain_10_beta + 1.96*ED_gain_10_SE)
+ED_gain_10_OR_lowerCI <- exp(ED_gain_10_beta - 1.96*ED_gain_10_SE)
+
+ED_loss_5_beta <- coef(summary(ED_loss_5))[2,1] 
+ED_loss_5_SE <- coef(summary(ED_loss_5))[2,2] 
+ED_loss_5_OR <-  exp(ED_loss_5_beta)
+ED_loss_5_OR_upperCI <- exp(ED_loss_5_beta + 1.96*ED_loss_5_SE)
+ED_loss_5_OR_lowerCI <- exp(ED_loss_5_beta - 1.96*ED_loss_5_SE)
+
+ED_loss_10_beta <- coef(summary(ED_loss_10))[2,1] 
+ED_loss_10_SE <- coef(summary(ED_loss_10))[2,2] 
+ED_loss_10_OR <-  exp(ED_loss_10_beta)
+ED_loss_10_OR_upperCI <- exp(ED_loss_10_beta + 1.96*ED_loss_10_SE)
+ED_loss_10_OR_lowerCI <- exp(ED_loss_10_beta - 1.96*ED_loss_10_SE)
+
+ED_cycle_5_beta <- coef(summary(ED_cycle_5))[2,1] 
+ED_cycle_5_SE <- coef(summary(ED_cycle_5))[2,2] 
+ED_cycle_5_OR <-  exp(ED_cycle_5_beta)
+ED_cycle_5_OR_upperCI <- exp(ED_cycle_5_beta + 1.96*ED_cycle_5_SE)
+ED_cycle_5_OR_lowerCI <- exp(ED_cycle_5_beta - 1.96*ED_cycle_5_SE)
+
+ED_cycle_10_beta <- coef(summary(ED_cycle_10))[2,1] 
+ED_cycle_10_SE <- coef(summary(ED_cycle_10))[2,2] 
+ED_cycle_10_OR <-  exp(ED_cycle_10_beta)
+ED_cycle_10_OR_upperCI <- exp(ED_cycle_10_beta + 1.96*ED_cycle_10_SE)
+ED_cycle_10_OR_lowerCI <- exp(ED_cycle_10_beta - 1.96*ED_cycle_10_SE)
+
+
+
+depression_stable_5_beta <- coef(summary(depression_stable_5))[2,1] 
+depression_stable_5_SE <- coef(summary(depression_stable_5))[2,2] 
+depression_stable_5_OR <-  exp(depression_stable_5_beta)
+depression_stable_5_OR_upperCI <- exp(depression_stable_5_beta + 1.96*depression_stable_5_SE)
+depression_stable_5_OR_lowerCI <- exp(depression_stable_5_beta - 1.96*depression_stable_5_SE)
+
+depression_stable_10_beta <- coef(summary(depression_stable_10))[2,1] 
+depression_stable_10_SE <- coef(summary(depression_stable_10))[2,2] 
+depression_stable_10_OR <-  exp(depression_stable_10_beta)
+depression_stable_10_OR_upperCI <- exp(depression_stable_10_beta + 1.96*depression_stable_10_SE)
+depression_stable_10_OR_lowerCI <- exp(depression_stable_10_beta - 1.96*depression_stable_10_SE)
+
+depression_gain_5_beta <- coef(summary(depression_gain_5))[2,1] 
+depression_gain_5_SE <- coef(summary(depression_gain_5))[2,2] 
+depression_gain_5_OR <-  exp(depression_gain_5_beta)
+depression_gain_5_OR_upperCI <- exp(depression_gain_5_beta + 1.96*depression_gain_5_SE)
+depression_gain_5_OR_lowerCI <- exp(depression_gain_5_beta - 1.96*depression_gain_5_SE)
+
+depression_gain_10_beta <- coef(summary(depression_gain_10))[2,1] 
+depression_gain_10_SE <- coef(summary(depression_gain_10))[2,2] 
+depression_gain_10_OR <-  exp(depression_gain_10_beta)
+depression_gain_10_OR_upperCI <- exp(depression_gain_10_beta + 1.96*depression_gain_10_SE)
+depression_gain_10_OR_lowerCI <- exp(depression_gain_10_beta - 1.96*depression_gain_10_SE)
+
+depression_loss_5_beta <- coef(summary(depression_loss_5))[2,1] 
+depression_loss_5_SE <- coef(summary(depression_loss_5))[2,2] 
+depression_loss_5_OR <-  exp(depression_loss_5_beta)
+depression_loss_5_OR_upperCI <- exp(depression_loss_5_beta + 1.96*depression_loss_5_SE)
+depression_loss_5_OR_lowerCI <- exp(depression_loss_5_beta - 1.96*depression_loss_5_SE)
+
+depression_loss_10_beta <- coef(summary(depression_loss_10))[2,1] 
+depression_loss_10_SE <- coef(summary(depression_loss_10))[2,2] 
+depression_loss_10_OR <-  exp(depression_loss_10_beta)
+depression_loss_10_OR_upperCI <- exp(depression_loss_10_beta + 1.96*depression_loss_10_SE)
+depression_loss_10_OR_lowerCI <- exp(depression_loss_10_beta - 1.96*depression_loss_10_SE)
+
+depression_cycle_5_beta <- coef(summary(depression_cycle_5))[2,1] 
+depression_cycle_5_SE <- coef(summary(depression_cycle_5))[2,2] 
+depression_cycle_5_OR <-  exp(depression_cycle_5_beta)
+depression_cycle_5_OR_upperCI <- exp(depression_cycle_5_beta + 1.96*depression_cycle_5_SE)
+depression_cycle_5_OR_lowerCI <- exp(depression_cycle_5_beta - 1.96*depression_cycle_5_SE)
+
+depression_cycle_10_beta <- coef(summary(depression_cycle_10))[2,1] 
+depression_cycle_10_SE <- coef(summary(depression_cycle_10))[2,2] 
+depression_cycle_10_OR <-  exp(depression_cycle_10_beta)
+depression_cycle_10_OR_upperCI <- exp(depression_cycle_10_beta + 1.96*depression_cycle_10_SE)
+depression_cycle_10_OR_lowerCI <- exp(depression_cycle_10_beta - 1.96*depression_cycle_10_SE)
+
+
+
+obesity_stable_5_beta <- coef(summary(obesity_stable_5))[2,1] 
+obesity_stable_5_SE <- coef(summary(obesity_stable_5))[2,2] 
+obesity_stable_5_OR <-  exp(obesity_stable_5_beta)
+obesity_stable_5_OR_upperCI <- exp(obesity_stable_5_beta + 1.96*obesity_stable_5_SE)
+obesity_stable_5_OR_lowerCI <- exp(obesity_stable_5_beta - 1.96*obesity_stable_5_SE)
+
+obesity_stable_10_beta <- coef(summary(obesity_stable_10))[2,1] 
+obesity_stable_10_SE <- coef(summary(obesity_stable_10))[2,2] 
+obesity_stable_10_OR <-  exp(obesity_stable_10_beta)
+obesity_stable_10_OR_upperCI <- exp(obesity_stable_10_beta + 1.96*obesity_stable_10_SE)
+obesity_stable_10_OR_lowerCI <- exp(obesity_stable_10_beta - 1.96*obesity_stable_10_SE)
+
+obesity_gain_5_beta <- coef(summary(obesity_gain_5))[2,1] 
+obesity_gain_5_SE <- coef(summary(obesity_gain_5))[2,2] 
+obesity_gain_5_OR <-  exp(obesity_gain_5_beta)
+obesity_gain_5_OR_upperCI <- exp(obesity_gain_5_beta + 1.96*obesity_gain_5_SE)
+obesity_gain_5_OR_lowerCI <- exp(obesity_gain_5_beta - 1.96*obesity_gain_5_SE)
+
+obesity_gain_10_beta <- coef(summary(obesity_gain_10))[2,1] 
+obesity_gain_10_SE <- coef(summary(obesity_gain_10))[2,2] 
+obesity_gain_10_OR <-  exp(obesity_gain_10_beta)
+obesity_gain_10_OR_upperCI <- exp(obesity_gain_10_beta + 1.96*obesity_gain_10_SE)
+obesity_gain_10_OR_lowerCI <- exp(obesity_gain_10_beta - 1.96*obesity_gain_10_SE)
+
+obesity_loss_5_beta <- coef(summary(obesity_loss_5))[2,1] 
+obesity_loss_5_SE <- coef(summary(obesity_loss_5))[2,2] 
+obesity_loss_5_OR <-  exp(obesity_loss_5_beta)
+obesity_loss_5_OR_upperCI <- exp(obesity_loss_5_beta + 1.96*obesity_loss_5_SE)
+obesity_loss_5_OR_lowerCI <- exp(obesity_loss_5_beta - 1.96*obesity_loss_5_SE)
+
+obesity_loss_10_beta <- coef(summary(obesity_loss_10))[2,1] 
+obesity_loss_10_SE <- coef(summary(obesity_loss_10))[2,2] 
+obesity_loss_10_OR <-  exp(obesity_loss_10_beta)
+obesity_loss_10_OR_upperCI <- exp(obesity_loss_10_beta + 1.96*obesity_loss_10_SE)
+obesity_loss_10_OR_lowerCI <- exp(obesity_loss_10_beta - 1.96*obesity_loss_10_SE)
+
+obesity_cycle_5_beta <- coef(summary(obesity_cycle_5))[2,1] 
+obesity_cycle_5_SE <- coef(summary(obesity_cycle_5))[2,2] 
+obesity_cycle_5_OR <-  exp(obesity_cycle_5_beta)
+obesity_cycle_5_OR_upperCI <- exp(obesity_cycle_5_beta + 1.96*obesity_cycle_5_SE)
+obesity_cycle_5_OR_lowerCI <- exp(obesity_cycle_5_beta - 1.96*obesity_cycle_5_SE)
+
+obesity_cycle_10_beta <- coef(summary(obesity_cycle_10))[2,1] 
+obesity_cycle_10_SE <- coef(summary(obesity_cycle_10))[2,2] 
+obesity_cycle_10_OR <-  exp(obesity_cycle_10_beta)
+obesity_cycle_10_OR_upperCI <- exp(obesity_cycle_10_beta + 1.96*obesity_cycle_10_SE)
+obesity_cycle_10_OR_lowerCI <- exp(obesity_cycle_10_beta - 1.96*obesity_cycle_10_SE)
+
+
+### compile the data for the ggplot ###
+
+library(ggplot2)
+library(dplyr)
+
+#actually ED cases are used here, instead of AN
+
+model <- c("AN_stable_weight_5","AN_stable_weight_10","AN_weight_gain_5","AN_weight_gain_10","AN_weight_loss_5","AN_weight_loss_10","AN_weight_cycle_5","AN_weight_cycle_10","Depression_stable_weight_5","Depression_stable_weight_10","Depression_weight_gain_5","Depression_weight_gain_10","Depression_weight_loss_5","Depression_weight_loss_10","Depression_weight_cycle_5","Depression_weight_cycle_10","Obesity_stable_weight_5","Obesity_stable_weight_10","Obesity_weight_gain_5","Obesity_weight_gain_10","Obesity_weight_loss_5","Obesity_weight_loss_10","Obesity_weight_cycle_5","Obesity_weight_cycle_10")
+dx_outcome <-c(rep("AN",8),rep("Depression",8),rep("Obesity",8))
+cutoff <- rep(c("5%","10%"),12)
+model <- factor(model, as.character(model))
+OR <-c(ED_stable_5_OR,ED_stable_10_OR,ED_gain_5_OR,ED_gain_10_OR,ED_loss_5_OR,ED_loss_10_OR,ED_cycle_5_OR,ED_cycle_10_OR,depression_stable_5_OR,depression_stable_10_OR,depression_gain_5_OR,depression_gain_10_OR,depression_loss_5_OR,depression_loss_10_OR,depression_cycle_5_OR,depression_cycle_10_OR,obesity_stable_5_OR,obesity_stable_10_OR, obesity_gain_5_OR,obesity_gain_10_OR, obesity_loss_5_OR,obesity_loss_10_OR,obesity_cycle_5_OR,obesity_cycle_10_OR)
+upperCI <- c(ED_stable_5_OR_upperCI,ED_stable_10_OR_upperCI,ED_gain_5_OR_upperCI,ED_gain_10_OR_upperCI,ED_loss_5_OR_upperCI,ED_loss_10_OR_upperCI,ED_cycle_5_OR_upperCI,ED_cycle_10_OR_upperCI,depression_stable_5_OR_upperCI,depression_stable_10_OR_upperCI, depression_gain_5_OR_upperCI,depression_gain_10_OR_upperCI, depression_loss_5_OR_upperCI,depression_loss_10_OR_upperCI,depression_cycle_5_OR_upperCI,depression_cycle_10_OR_upperCI,obesity_stable_5_OR_upperCI,obesity_stable_10_OR_upperCI, obesity_gain_5_OR_upperCI,obesity_gain_10_OR_upperCI, obesity_loss_5_OR_upperCI,obesity_loss_10_OR_upperCI,obesity_cycle_5_OR_upperCI,obesity_cycle_10_OR_upperCI)
+lowerCI <- c(ED_stable_5_OR_lowerCI,ED_stable_10_OR_lowerCI,ED_gain_5_OR_lowerCI,ED_gain_10_OR_lowerCI,ED_loss_5_OR_lowerCI,ED_loss_10_OR_lowerCI,ED_cycle_5_OR_lowerCI,ED_cycle_10_OR_lowerCI,depression_stable_5_OR_lowerCI,depression_stable_10_OR_lowerCI, depression_gain_5_OR_lowerCI,depression_gain_10_OR_lowerCI, depression_loss_5_OR_lowerCI,depression_loss_10_OR_lowerCI,depression_cycle_5_OR_lowerCI,depression_cycle_10_OR_lowerCI,obesity_stable_5_OR_lowerCI,obesity_stable_10_OR_lowerCI, obesity_gain_5_OR_lowerCI,obesity_gain_10_OR_lowerCI, obesity_loss_5_OR_lowerCI,obesity_loss_10_OR_lowerCI,obesity_cycle_5_OR_lowerCI,obesity_cycle_10_OR_lowerCI)
+
+figure2_phecode_forest <- data.frame(model,dx_outcome,cutoff,OR,upperCI,lowerCI)
+figure2_phecode_forest$model <- factor(figure2_phecode_forest$model, levels=c("AN_stable_weight_5","AN_stable_weight_10","AN_weight_gain_5","AN_weight_gain_10","AN_weight_loss_5","AN_weight_loss_10","AN_weight_cycle_5","AN_weight_cycle_10","Depression_stable_weight_5","Depression_stable_weight_10","Depression_weight_gain_5","Depression_weight_gain_10","Depression_weight_loss_5","Depression_weight_loss_10","Depression_weight_cycle_5","Depression_weight_cycle_10","Obesity_stable_weight_5","Obesity_stable_weight_10","Obesity_weight_gain_5","Obesity_weight_gain_10","Obesity_weight_loss_5","Obesity_weight_loss_10","Obesity_weight_cycle_5","Obesity_weight_cycle_10"))
+
+figure2_phecode_forest_m <- figure2_phecode_forest %>% mutate(upperCI_l = ifelse(upperCI >6 , 6-OR, NA))
+
+
+pdf("figure2.phecode.v2.pdf", width=3, height=3)
+ggplot(figure2_phecode_forest_m, aes(x=OR, y=factor(model), colour=dx_outcome,shape=cutoff)) +  theme_bw()  +
+    	geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_weight_loss_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "pink2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_weight_loss_5"),size=2) +
+   		geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_weight_loss_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "pink2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_weight_loss_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_weight_gain_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,width = 0.2, color = "palevioletred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_weight_gain_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_weight_gain_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "palevioletred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_weight_gain_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_weight_cycle_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "orchid2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_weight_cycle_5"),size=2) +
+   		geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_weight_cycle_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "orchid2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_weight_cycle_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_stable_weight_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,width = 0.2, color = "violetred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_stable_weight_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "AN_stable_weight_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "violetred2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "AN_stable_weight_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_weight_loss_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2,color = "seagreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_weight_loss_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_weight_loss_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2,color = "seagreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_weight_loss_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_weight_gain_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "darkolivegreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_weight_gain_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_weight_gain_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "darkolivegreen2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_weight_gain_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_weight_cycle_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "chartreuse2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_weight_cycle_5"),size=2) +
+   		geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_weight_cycle_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "chartreuse2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_weight_cycle_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_stable_weight_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,width = 0.2, color = "forestgreen",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_stable_weight_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Depression_stable_weight_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "forestgreen",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Depression_stable_weight_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_weight_loss_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "cadetblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_weight_loss_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_weight_loss_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "cadetblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_weight_loss_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_weight_gain_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "deepskyblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_weight_gain_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_weight_gain_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "deepskyblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_weight_gain_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_weight_cycle_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "dodgerblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_weight_cycle_5"),size=2) +
+   		geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_weight_cycle_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "dodgerblue2",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_weight_cycle_10"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_stable_weight_5"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5,width = 0.2, color = "royalblue4",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_stable_weight_5"),size=2) +
+        geom_errorbar(data = filter(figure2_phecode_forest_m, model == "Obesity_stable_weight_10"),aes(xmin=lowerCI, xmax=upperCI),  size = 0.5, width = 0.2, color = "royalblue4",  show.legend=FALSE) +
+    geom_point(data = filter(figure2_phecode_forest_m,  model == "Obesity_stable_weight_10"),size=2) +
+    geom_segment(aes(y= factor(model), yend=factor(model), x = OR, xend = OR + upperCI_l), arrow = arrow(length = unit(0.2, "cm"))) +
+    coord_cartesian(xlim=c(0, 6))   +theme(legend.position = "none") +
+    labs(x = "OR of Disease Phecode on Weight Trajectory") + 
+    scale_y_discrete(limits = rev(levels(model))) +  geom_vline(aes(xintercept = 1), size = 0.5, linetype = "dashed") +
+    theme(axis.text=element_text(size=5,face="bold"),  axis.title.x=element_text(size=5,face="bold"),  axis.title.y=element_blank())  
+
+
+
+##############################################################################################
+###     Figure 4: Associations of PRS with weight trajectory by deciles and by ancestry    ###
+##############################################################################################
+
+
+#################################################
+####  Plot for obesity PRS and weight gain  #####
+#################################################
+
+ob_prs_wt_gain_5 <- read.table('obese.weight_gain_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+
+ob_prs_wt_gain_5 <- ob_prs_wt_gain_5[which(ob_prs_wt_gain_5[,3]=="Yes"),]
+colnames(ob_prs_wt_gain_5)[colnames(ob_prs_wt_gain_5)=="FID"] <- "ID"
+ob_prs_wt_gain_5 <- ob_prs_wt_gain_5[,c(1,4)]
+
+# get the phenotype information
+pheno_wt_gain_5 <- weight_pheno[which(weight_pheno$ID %in% ob_prs_wt_gain_5[,1]),]
+
+ob_pheno_prs_wt_gain_5 <- merge(pheno_wt_gain_5,ob_prs_wt_gain_5, by="ID")
+
+# create PRS deciles
+library(StatMeasures)
+ob_pheno_prs_wt_gain_5$decile_prs <- decile(vector = ob_pheno_prs_wt_gain_5$PRS, decreasing = FALSE)
+
+# run the obesity PRS ~ weight gain association
+
+ob_wt_gain_5_glm <- glm(weight_gain_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=ob_pheno_prs_wt_gain_5,family=binomial)
+summary(ob_wt_gain_5_glm)
+coef_ob_wt_gain_5_glm <- as.data.frame(exp(coef(ob_wt_gain_5_glm)))
+CI95_ob_wt_gain_5_glm <- as.data.frame(exp(confint(ob_wt_gain_5_glm)))
+
+decile_prs <- c(2:10)
+plotOR_ob_wt_gain_5 <- cbind(decile_prs,coef_ob_wt_gain_5_glm[c(2:10),], CI95_ob_wt_gain_5_glm[c(2:10),])
+colnames(plotOR_ob_wt_gain_5)[colnames(plotOR_ob_wt_gain_5)=="coef_ob_wt_gain_5_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_ob_wt_gain_5)[colnames(plotOR_ob_wt_gain_5)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_ob_wt_gain_5)[colnames(plotOR_ob_wt_gain_5)=="97.5 %"] <- "upperCI"
+rownames(plotOR_ob_wt_gain_5) <- NULL
+
+library(tidyverse)
+plotOR_ob_wt_gain_5 <- plotOR_ob_wt_gain_5 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_ob_wt_gain_5  <- plotOR_ob_wt_gain_5[order(plotOR_ob_wt_gain_5$decile_prs),]
+plotOR_ob_wt_gain_5
+
+ggplot(plotOR_ob_wt_gain_5, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+ geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,3)  + 
+xlab("Obesity-PRS Decile with Weight Gain Trajectory") + theme(axis.text=element_text(size=12), axis.title=element_text(size=14,face="bold"))
+
+
+#################################################
+####     Plot for AN PRS and weight loss    #####
+#################################################
+
+#decile as predictor
+an_wt_loss_5_glm <- glm(weight_loss_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_loss_5,family=binomial)
+summary(an_wt_loss_5_glm)
+coef_an_wt_loss_5_glm <- as.data.frame(exp(coef(an_wt_loss_5_glm)))
+CI95_an_wt_loss_5_glm <- as.data.frame(exp(confint(an_wt_loss_5_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_5 <- cbind(decile_prs,coef_an_wt_loss_5_glm[c(2:10),], CI95_an_wt_loss_5_glm[c(2:10),])
+colnames(plotOR_an_wt_loss_5)[colnames(plotOR_an_wt_loss_5)=="coef_an_wt_loss_5_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_5)[colnames(plotOR_an_wt_loss_5)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_5)[colnames(plotOR_an_wt_loss_5)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_5) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_5 <- plotOR_an_wt_loss_5 %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_5  <- plotOR_an_wt_loss_5[order(plotOR_an_wt_loss_5$decile_prs),]
+plotOR_an_wt_loss_5
+
+library(ggplot2)
+
+ggplot(plotOR_an_wt_loss_5, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+
+geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,3)  + xlab("AN-PRS Decile with Weight Loss Trajectory")+theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))
+
+
+
+#########################################################################
+####     Plot for AN PRS and weight loss in different ancestries    #####
+#########################################################################
+
+# PRSice for other ancestry groups
+
+#!/bin/bash
+module load R
+
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinAFR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA  --perm 10000 \
+--beta --pheno weight_loss_sens_nonclin_withinAFR.txt --target GSA_AFRonly.final.QC  --out weight_loss_sens_nonclin_withinAFR_wo_an_mdd_encounter.PRS --thread 10 --print-snp
+
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinHA.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA  --perm 10000 \
+--beta --pheno weight_loss_sens_nonclin_withinHA.txt --target GSA_HAonly.final.QC  --out weight_loss_sens_nonclin_withinHA_wo_an_mdd_encounter.PRS --thread 10 --print-snp
+
+bsub -q premium -P acc_psychgen -n 1 -W 24:00  -R rusage[mem=32000] -o PRS_nonclin_wtloss5_ancestry_wo_an_mdd_encounter.o -e PRS_nonclin_wtloss5_ancestry_wo_an_mdd_encounter.e ./PRS_nonclin_wtloss5_ancestry_wo_an_mdd_encounter.sh
+
+
+# in R
+
+an_prs_wt_loss_5_afr <- read.table('weight_loss_sens_nonclin_withinAFR_wo_an_mdd_encounter.PRS.best', header=T)
+an_prs_wt_loss_5_ha <- read.table('weight_loss_sens_nonclin_withinHA_wo_an_mdd_encounter.PRS.best', header=T)
+
+
+an_prs_wt_loss_5_afr <- an_prs_wt_loss_5_afr[which(an_prs_wt_loss_5_afr[,3]=="Yes"),]
+an_prs_wt_loss_5_ha <- an_prs_wt_loss_5_ha[which(an_prs_wt_loss_5_ha[,3]=="Yes"),]
+
+colnames(an_prs_wt_loss_5_afr)[colnames(an_prs_wt_loss_5_afr)=="FID"] <- "ID"
+colnames(an_prs_wt_loss_5_ha)[colnames(an_prs_wt_loss_5_ha)=="FID"] <- "ID"
+
+an_prs_wt_loss_5_afr <- an_prs_wt_loss_5_afr[,c(1,4)]
+an_prs_wt_loss_5_ha <- an_prs_wt_loss_5_ha[,c(1,4)]
+
+pheno_wt_loss_5_afr <- weight_pheno[which(weight_pheno$ID %in% an_prs_wt_loss_5_afr[,1]),]
+pheno_wt_loss_5_ha <- weight_pheno[which(weight_pheno$ID %in% an_prs_wt_loss_5_ha[,1]),]
+
+an_pheno_prs_wt_loss_5_afr <- merge(pheno_wt_loss_5_afr,an_prs_wt_loss_5_afr, by="ID")
+an_pheno_prs_wt_loss_5_ha <- merge(pheno_wt_loss_5_ha,an_prs_wt_loss_5_ha, by="ID")
+
+library(StatMeasures)
+an_pheno_prs_wt_loss_5_afr$decile_prs <- decile(vector = an_pheno_prs_wt_loss_5_afr$PRS, decreasing = FALSE)
+an_pheno_prs_wt_loss_5_ha$decile_prs <- decile(vector = an_pheno_prs_wt_loss_5_ha$PRS, decreasing = FALSE)
+
+# in AFR
+
+an_wt_loss_5_afr_glm <- glm(weight_loss_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1_AFR + PC2_AFR + PC3_AFR + PC4_AFR + PC5_AFR + encounter_times, data=an_pheno_prs_wt_loss_5_afr,family=binomial)
+summary(an_wt_loss_5_afr_glm)
+coef_an_wt_loss_5_afr_glm <- as.data.frame(exp(coef(an_wt_loss_5_afr_glm)))
+CI95_an_wt_loss_5_afr_glm <- as.data.frame(exp(confint(an_wt_loss_5_afr_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_5_afr <- cbind(decile_prs,coef_an_wt_loss_5_afr_glm[c(2:10),], CI95_an_wt_loss_5_afr_glm[c(2:10),])
+colnames(plotOR_an_wt_loss_5_afr)[colnames(plotOR_an_wt_loss_5_afr)=="coef_an_wt_loss_5_afr_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_5_afr)[colnames(plotOR_an_wt_loss_5_afr)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_5_afr)[colnames(plotOR_an_wt_loss_5_afr)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_5_afr) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_5_afr <- plotOR_an_wt_loss_5_afr %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_5_afr  <- plotOR_an_wt_loss_5_afr[order(plotOR_an_wt_loss_5_afr$decile_prs),]
+plotOR_an_wt_loss_5_afr
+
+library(ggplot2)
+#tiff("plotOR_prs_wt_loss_5.tiff")
+ggplot(plotOR_an_wt_loss_5_afr, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+
+geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,4)  + xlab("AN-PRS Decile with Weight Loss Trajectory")+theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))
+#dev.off()
+
+# in HA
+an_wt_loss_5_ha_continuous <- glm(weight_loss_5 ~ PRS
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1_HA + PC2_HA + PC3_HA + PC4_HA + PC5_HA + encounter_times, data=an_pheno_prs_wt_loss_5_ha,family=binomial)
+summary(an_wt_loss_5_ha_continuous)
+#p=0.096
+
+an_wt_loss_5_ha_glm <- glm(weight_loss_5 ~ as.factor(decile_prs)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1_HA + PC2_HA + PC3_HA + PC4_HA + PC5_HA + encounter_times, data=an_pheno_prs_wt_loss_5_ha,family=binomial)
+summary(an_wt_loss_5_ha_glm)
+coef_an_wt_loss_5_ha_glm <- as.data.frame(exp(coef(an_wt_loss_5_ha_glm)))
+CI95_an_wt_loss_5_ha_glm <- as.data.frame(exp(confint(an_wt_loss_5_ha_glm)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_5_ha <- cbind(decile_prs,coef_an_wt_loss_5_ha_glm[c(2:10),], CI95_an_wt_loss_5_ha_glm[c(2:10),])
+colnames(plotOR_an_wt_loss_5_ha)[colnames(plotOR_an_wt_loss_5_ha)=="coef_an_wt_loss_5_ha_glm[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_5_ha)[colnames(plotOR_an_wt_loss_5_ha)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_5_ha)[colnames(plotOR_an_wt_loss_5_ha)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_5_ha) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_5_ha <- plotOR_an_wt_loss_5_ha %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_5_ha  <- plotOR_an_wt_loss_5_ha[order(plotOR_an_wt_loss_5_ha$decile_prs),]
+plotOR_an_wt_loss_5_ha
+
+library(ggplot2)
+#tiff("plotOR_prs_wt_loss_5.tiff")
+ggplot(plotOR_an_wt_loss_5_ha, aes(x=as.factor(decile_prs),y=OR)) + geom_point()+
+geom_errorbar(aes(ymin=lowerCI,ymax=upperCI),width=0.2)+ geom_hline(aes(yintercept = 1))  +ylim(0,4)  + xlab("AN-PRS Decile with Weight Loss Trajectory")+theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))
+
+
+#forest plot for AN PRS association with weight loss in EUR, AFR and HA
+
+ancestry <-c("European","African","Hispanic")
+ancestry <- factor(ancestry, as.character(ancestry)) #set it as character
+data <- rbind(plotOR_an_wt_loss_5[10,c(2:4)],plotOR_an_wt_loss_5_afr[10,c(2:4)],plotOR_an_wt_loss_5_ha[10,c(2:4)])
+AN_PRS_loss_forest <- data.frame(ancestry,data)
+AN_PRS_loss_forest$ancestry <- factor(AN_PRS_loss_forest$ancestry, levels=c("European","African","Hispanic"))
+
+
+library(ggplot2)
+library(dplyr)
+
+ggplot(AN_PRS_loss_forest,aes(x=OR, xmax = upperCI, xmin = lowerCI, y=factor(ancestry), color=ancestry))  +  scale_x_continuous(limits = c(0, 4))  +theme(legend.position = "none") + scale_y_discrete(limits = rev(levels(ancestry))) +  geom_vline(aes(xintercept = 1), size = 1, linetype = "dashed")    + theme_bw()  + xlab("OR of AN PRS (Top vs Bottom 10%) on Weight Loss Trajectory") +
+  geom_errorbarh(data = filter(AN_PRS_loss_forest, ancestry == "European"), aes(xmax = upperCI, xmin = lowerCI), size = 2, height = 0.1, color = "gray50",  show.legend=FALSE) +
+  geom_point(data = filter(AN_PRS_loss_forest,  ancestry == "European"), size = 8, color = "red", show.legend=FALSE) +
+  geom_errorbarh(data = filter(AN_PRS_loss_forest,  ancestry == "African"), aes(xmax = upperCI, xmin = lowerCI), size = 2, height = 0.1, color = "gray50", show.legend=FALSE) +
+  geom_point(data = filter(AN_PRS_loss_forest, ancestry == "African"), size = 8, color = "hotpink",show.legend=FALSE) +
+  geom_errorbarh(data = filter(AN_PRS_loss_forest, ancestry == "Hispanic"), aes(xmax = upperCI, xmin = lowerCI), size = 2, height = 0.1, color = "gray50", show.legend=FALSE) +
+  geom_point(data = filter(AN_PRS_loss_forest,  ancestry == "Hispanic"), size = 8,color = "pink", show.legend=FALSE) +
+  theme(axis.text=element_text(size=12,face="bold"),  axis.title.x=element_text(size=12,face="bold"),  axis.title.y=element_blank()) 
+  
+
+
+########################################################
+####                     TABLES                     ####
+########################################################
+
+
+####################################################################################
+### Table 1: Characteristics of participants included in PheWAS and PRS analyses ###
+####################################################################################
+
+##########################
+### PheWAS sample size ### 
+##########################
+
+
+non_missing_phewas_dat <- new_phewas_dat[which( (!is.na(new_phewas_dat$SEX)) & (!is.na(new_phewas_dat$first_annualBMI)) & (!is.na(new_phewas_dat$alcohol_user)) & (!is.na(new_phewas_dat$ever_smoker))),]
+#20550 ppts 
+
+totaln<- 20550
+summary(non_missing_phewas_dat)
+table(non_missing_phewas_dat$SEX)
+
+
+##### Categorize the age to different groups
+
+for (i in 1:dim(non_missing_phewas_dat)[1]) {
+	if (non_missing_phewas_dat$first_annualKG_age[i] <= 29) {
+	    non_missing_phewas_dat$age_cat[i] <- "25-29"}
+	else if (non_missing_phewas_dat$first_annualKG_age[i] <= 39) {
+	    non_missing_phewas_dat$age_cat[i] <- "30-39"}	
+	else if (non_missing_phewas_dat$first_annualKG_age[i] <= 49) {
+	    non_missing_phewas_dat$age_cat[i] <- "40-49"}	
+	else if (non_missing_phewas_dat$first_annualKG_age[i] <= 59) {
+	    non_missing_phewas_dat$age_cat[i] <- "50-59"}	
+	else if (non_missing_phewas_dat$first_annualKG_age[i] <= 69) {
+	    non_missing_phewas_dat$age_cat[i] <- "60-69"}	
+	else if (non_missing_phewas_dat$first_annualKG_age[i] <= 79) {
+	    non_missing_phewas_dat$age_cat[i] <- "70-79"}	
+	else if (non_missing_phewas_dat$first_annualKG_age[i] > 79) {
+	    non_missing_phewas_dat$age_cat[i] <- "80-85"}	
+}
+
+table(non_missing_phewas_dat$age_cat)
+
+##### Categorize the BMI to different groups
+
+for (i in 1:dim(non_missing_phewas_dat)[1]) {
+	if (non_missing_phewas_dat$first_annualBMI[i] < 18.5) {
+	    non_missing_phewas_dat$BMI_cat[i] <- "underweight"}
+	else if (non_missing_phewas_dat$first_annualBMI[i] < 25) {
+	    non_missing_phewas_dat$BMI_cat[i] <- "normal"}	
+	else if (non_missing_phewas_dat$first_annualBMI[i] < 30) {
+	    non_missing_phewas_dat$BMI_cat[i] <- "overweight"}	
+	else if (non_missing_phewas_dat$first_annualBMI[i] < 35) {
+	    non_missing_phewas_dat$BMI_cat[i] <- "obeseI"}	
+	else if (non_missing_phewas_dat$first_annualBMI[i] < 40) {
+	    non_missing_phewas_dat$BMI_cat[i] <- "obeseII"}	
+	else if (non_missing_phewas_dat$first_annualBMI[i] >= 40) {
+	    non_missing_phewas_dat$BMI_cat[i] <- "morbid"}	
+}
+
+table(non_missing_phewas_dat$BMI_cat)
+
+summary(non_missing_phewas_dat$encounter_times) # number of doctor visits
+table(non_missing_phewas_dat$alcohol_user)
+table(non_missing_phewas_dat$ever_smoker)
+
+table(non_missing_phewas_dat$stable_weight_5)
+table(non_missing_phewas_dat$weight_loss_5)
+table(non_missing_phewas_dat$weight_gain_5)
+table(non_missing_phewas_dat$weight_cycle_5)
+
+table(non_missing_phewas_dat$stable_weight_10)
+table(non_missing_phewas_dat$weight_loss_10)
+table(non_missing_phewas_dat$weight_gain_10)
+table(non_missing_phewas_dat$weight_cycle_10)
+
+######################################
+###   EUR/AFR/HA  PRS sample size  ### 
+######################################
+
+geno_pptlist <- read.table("GSA_EURonly.final.QC.pptlist") #6082 ppts (within the 6258 EUR ppts)
+geno_pptlist_afr <- read.table("GSA_AFRonly.final.QC.pptlist") #5047 ppts
+geno_pptlist_ha <- read.table("GSA_HAonly.final.QC.pptlist") #5865 ppts
+weight_pheno <- read.table("weight_pheno",header=TRUE) #21487 ppts
+alcohol <- read.table("/sc/arion/projects/rg_psychgen/processed_data/BRSPD_QCd/smk_alc/alcohol_use",header=TRUE)
+smk <- read.table("/sc/arion/projects/rg_psychgen/processed_data/BRSPD_QCd/smk_alc/ever_smoking",header=TRUE)
+encounter.count <- read.table("/sc/arion/projects/rg_psychgen/results/xuj18/wt_trajectory_phewas/biome_encounter_times",header=TRUE)
+
+
+colnames(alcohol)[colnames(alcohol)=="bio_r_spd_id"]  <-  "ID"
+colnames(smk)[colnames(smk)=="bio_r_spd_id"]  <-  "ID"
+
+colnames(geno_pptlist) <- "ID"
+colnames(geno_pptlist_afr) <- "ID"
+colnames(geno_pptlist_ha) <- "ID"
+ 
+# ID to exclude (AN/ED/MDD patients)
+icd <- read.table("Encounter_Diagnosis_04.22.20",header=TRUE, sep="\t")
+
+AN_ID  <- unique(icd[which(icd$dx_code1=="F50.00"),1]) #15 ppts
+ED_ID  <- unique(icd[which(substring(icd$dx_code1,1,3) == "F50"),1]) #108 ppts
+mdd_ID <- unique(icd[which(substring(icd$dx_code1,1,3) == "F32" |substring(icd$dx_code1,1,3) == "F33"),1]) #6122 ppts
+
+AN_ID <- as.data.frame(AN_ID) #15 ppts
+colnames(AN_ID)[colnames(AN_ID)=="AN_ID"] <- "ID"
+ED_ID <- as.data.frame(ED_ID) #108 ppts
+colnames(ED_ID)[colnames(ED_ID)=="ED_ID"] <- "ID"
+mdd_ID <- as.data.frame(mdd_ID) #6122 ppts
+colnames(mdd_ID)[colnames(mdd_ID)=="mdd_ID"] <- "ID"
+
+exclusion_ID <- unique(rbind(AN_ID,ED_ID,mdd_ID))  #6163 ppts
+#All AN_ID are in ED_ID, so I didn't miss anyone, yay!
+
+weight_pheno$exclusion <- ifelse((weight_pheno$ID %in% exclusion_ID$ID),1,0)
+
+
+weight_pheno_EUR <- merge(geno_pptlist,weight_pheno,by="ID") #6082 ppts
+weight_pheno_AFR <- merge(geno_pptlist_afr,weight_pheno,by="ID")#5047 ppts
+weight_pheno_HA <- merge(geno_pptlist_ha,weight_pheno,by="ID") #5865 ppts
+
+weight_pheno_EUR_nonclin <- weight_pheno_EUR[which(weight_pheno_EUR$exclusion==0),]
+weight_pheno_AFR_nonclin <- weight_pheno_AFR[which(weight_pheno_AFR$exclusion==0),]
+weight_pheno_HA_nonclin <- weight_pheno_HA[which(weight_pheno_HA$exclusion==0),]
+
+
+colnames(weight_pheno_EUR_nonclin)[colnames(weight_pheno_EUR_nonclin)=="FID"]  <-  "ID"
+weight_pheno_EUR_nonclin_cov_pre <- merge(weight_pheno_EUR_nonclin,alcohol,by="ID",all.x=TRUE)
+weight_pheno_EUR_nonclin_cov <- merge(weight_pheno_EUR_nonclin_cov_pre,smk,by="ID",all.x=TRUE)
+#4978 ppts, 48 columns
+
+colnames(weight_pheno_AFR_nonclin)[colnames(weight_pheno_AFR_nonclin)=="FID"]  <-  "ID"
+weight_pheno_AFR_nonclin_cov_pre <- merge(weight_pheno_AFR_nonclin,alcohol,by="ID",all.x=TRUE)
+weight_pheno_AFR_nonclin_cov <- merge(weight_pheno_AFR_nonclin_cov_pre,smk,by="ID",all.x=TRUE)
+#3804 ppts
+
+colnames(weight_pheno_HA_nonclin)[colnames(weight_pheno_HA_nonclin)=="FID"]  <-  "ID"
+weight_pheno_HA_nonclin_cov_pre <- merge(weight_pheno_HA_nonclin,alcohol,by="ID",all.x=TRUE)
+weight_pheno_HA_nonclin_cov <- merge(weight_pheno_HA_nonclin_cov_pre,smk,by="ID",all.x=TRUE)
+#3939 ppts
+
+non_missing_weight_pheno_EUR_nonclin <- weight_pheno_EUR_nonclin_cov[which( (!is.na(weight_pheno_EUR_nonclin_cov$SEX)) & (!is.na(weight_pheno_EUR_nonclin_cov$first_annualBMI)) ),]
+#non_missing_weight_pheno_EUR_nonclin <- weight_pheno_EUR_nonclin_cov[which( (!is.na(weight_pheno_EUR_nonclin_cov$SEX)) & (!is.na(weight_pheno_EUR_nonclin_cov$first_annualBMI)) & (!is.na(weight_pheno_EUR_nonclin_cov$alcohol_user)) & (!is.na(weight_pheno_EUR_nonclin_cov$ever_smoker))),]
+#4904 EUR ppts for PRS analysis
+
+non_missing_weight_pheno_AFR_nonclin <- weight_pheno_AFR_nonclin_cov[which( (!is.na(weight_pheno_AFR_nonclin_cov$SEX)) & (!is.na(weight_pheno_AFR_nonclin_cov$first_annualBMI)) ),]
+#3799 ppts for PRS analysis
+non_missing_weight_pheno_HA_nonclin <- weight_pheno_HA_nonclin_cov[which( (!is.na(weight_pheno_HA_nonclin_cov$SEX)) & (!is.na(weight_pheno_HA_nonclin_cov$first_annualBMI)) ),]
+#3930 ppts for PRS analysis
+
+non_missing_weight_pheno_EUR_nonclin <- merge(non_missing_weight_pheno_EUR_nonclin, encounter.count,by="ID")
+non_missing_weight_pheno_AFR_nonclin <- merge(non_missing_weight_pheno_AFR_nonclin, encounter.count,by="ID")
+non_missing_weight_pheno_HA_nonclin <- merge(non_missing_weight_pheno_HA_nonclin, encounter.count,by="ID")
+
+summary(non_missing_weight_pheno_EUR_nonclin) # 4904
+summary(non_missing_weight_pheno_AFR_nonclin) # 3798
+summary(non_missing_weight_pheno_HA_nonclin) # 3930 
+
+PRS_EUR_ID <- non_missing_weight_pheno_EUR_nonclin[,1]
+PRS_AFR_ID <- non_missing_weight_pheno_AFR_nonclin[,1]
+PRS_HA_ID <- non_missing_weight_pheno_HA_nonclin[,1]
+
+write.table(PRS_EUR_ID ,'PRS_EUR_ID',sep='\t', row.names=FALSE,quote=FALSE)
+write.table(PRS_AFR_ID ,'PRS_AFR_ID',sep='\t', row.names=FALSE,quote=FALSE)
+write.table(PRS_HA_ID ,'PRS_HA_ID',sep='\t', row.names=FALSE,quote=FALSE)
+
+table(non_missing_weight_pheno_EUR_nonclin$SEX)
+table(non_missing_weight_pheno_AFR_nonclin$SEX)
+table(non_missing_weight_pheno_HA_nonclin$SEX)
+
+
+#categorize the age and BMI to different groups
+
+test <- non_missing_weight_pheno_EUR_nonclin
+test <- non_missing_weight_pheno_AFR_nonclin
+test <- non_missing_weight_pheno_HA_nonclin
+
+for (i in 1:dim(test)[1]) {
+	if (test$first_annualKG_age[i] <= 29) {
+	    test$age_cat[i] <- "25-29"}
+	else if (test$first_annualKG_age[i] <= 39) {
+	    test$age_cat[i] <- "30-39"}	
+	else if (test$first_annualKG_age[i] <= 49) {
+	    test$age_cat[i] <- "40-49"}	
+	else if (test$first_annualKG_age[i] <= 59) {
+	    test$age_cat[i] <- "50-59"}	
+	else if (test$first_annualKG_age[i] <= 69) {
+	    test$age_cat[i] <- "60-69"}	
+	else if (test$first_annualKG_age[i] <= 79) {
+	    test$age_cat[i] <- "70-79"}	
+	else if (test$first_annualKG_age[i] > 79) {
+	    test$age_cat[i] <- "80-85"}	
+}
+
+
+for (i in 1:dim(test)[1]) {
+	if (test$first_annualBMI[i] < 18.5) {
+	    test$BMI_cat[i] <- "underweight"}
+	else if (test$first_annualBMI[i] < 25) {
+	    test$BMI_cat[i] <- "normal"}	
+	else if (test$first_annualBMI[i] < 30) {
+	    test$BMI_cat[i] <- "overweight"}	
+	else if (test$first_annualBMI[i] < 35) {
+	    test$BMI_cat[i] <- "obeseI"}	
+	else if (test$first_annualBMI[i] < 40) {
+	    test$BMI_cat[i] <- "obeseII"}	
+	else if (test$first_annualBMI[i] >= 40) {
+	    test$BMI_cat[i] <- "morbid"}	
+}
+
+non_missing_weight_pheno_EUR_nonclin <- test 
+non_missing_weight_pheno_AFR_nonclin <- test 
+non_missing_weight_pheno_HA_nonclin <- test 
+
+table(non_missing_weight_pheno_EUR_nonclin$age_cat)
+table(non_missing_weight_pheno_AFR_nonclin$age_cat)
+table(non_missing_weight_pheno_HA_nonclin$age_cat)
+
+table(non_missing_weight_pheno_EUR_nonclin$BMI_cat)
+table(non_missing_weight_pheno_AFR_nonclin$BMI_cat)
+table(non_missing_weight_pheno_HA_nonclin$BMI_cat)
+
+summary(non_missing_weight_pheno_EUR_nonclin$encounter_times)
+summary(non_missing_weight_pheno_AFR_nonclin$encounter_times)
+summary(non_missing_weight_pheno_HA_nonclin$encounter_times)
+
+
+table(non_missing_weight_pheno_EUR_nonclin$alcohol_user)
+table(non_missing_weight_pheno_AFR_nonclin$alcohol_user)
+table(non_missing_weight_pheno_HA_nonclin$alcohol_user)
+
+table(non_missing_weight_pheno_EUR_nonclin$ever_smoker)
+table(non_missing_weight_pheno_AFR_nonclin$ever_smoker)
+table(non_missing_weight_pheno_HA_nonclin$ever_smoker)
+
+table(non_missing_weight_pheno_EUR_nonclin$stable_weight_5)
+table(non_missing_weight_pheno_AFR_nonclin$stable_weight_5)
+table(non_missing_weight_pheno_HA_nonclin$stable_weight_5)
+
+table(non_missing_weight_pheno_EUR_nonclin$weight_gain_5)
+table(non_missing_weight_pheno_AFR_nonclin$weight_gain_5)
+table(non_missing_weight_pheno_HA_nonclin$weight_gain_5)
+
+table(non_missing_weight_pheno_EUR_nonclin$weight_loss_5)
+table(non_missing_weight_pheno_AFR_nonclin$weight_loss_5)
+table(non_missing_weight_pheno_HA_nonclin$weight_loss_5)
+
+table(non_missing_weight_pheno_EUR_nonclin$weight_cycle_5)
+table(non_missing_weight_pheno_AFR_nonclin$weight_cycle_5)
+table(non_missing_weight_pheno_HA_nonclin$weight_cycle_5)
+
+
+table(non_missing_weight_pheno_EUR_nonclin$stable_weight_10)
+table(non_missing_weight_pheno_AFR_nonclin$stable_weight_10)
+table(non_missing_weight_pheno_HA_nonclin$stable_weight_10)
+
+table(non_missing_weight_pheno_EUR_nonclin$weight_gain_10)
+table(non_missing_weight_pheno_AFR_nonclin$weight_gain_10)
+table(non_missing_weight_pheno_HA_nonclin$weight_gain_10)
+
+table(non_missing_weight_pheno_EUR_nonclin$weight_loss_10)
+table(non_missing_weight_pheno_AFR_nonclin$weight_loss_10)
+table(non_missing_weight_pheno_HA_nonclin$weight_loss_10)
+
+table(non_missing_weight_pheno_EUR_nonclin$weight_cycle_10)
+table(non_missing_weight_pheno_AFR_nonclin$weight_cycle_10)
+table(non_missing_weight_pheno_HA_nonclin$weight_cycle_10)
+
+
+
+#############################################################################################################################
+### different folder on minerva to get 1) number of weight measurs per person and 2) time span of weight measures (years) ###
+#############################################################################################################################
+
+## path: /sc/arion/projects/rg_psychgen/processed_data/BRSPD_QCd/wt_change/
+
+library(data.table)
+DT <- as.data.table(wt9_3annualKG)
+temp <-DT[, .SD[1], by=ID]
+temp <- as.data.frame(temp) #21487 individuals
+
+# for all PheWAS samples
+phewas_ID <- read.table("/sc/arion/projects/rg_psychgen/results/xuj18/wt_trajectory_phewas/phewas_ID",header=T)
+temp_phewas_ID <- temp[which(temp$ID %in% phewas_ID[,1]),] # 20550 ppts
+summary(temp_phewas_ID$ID_annualKG_count) # number of weight measurs per person
+summary(temp_phewas_ID$yearspan)  # time span of weight measures (years)
+
+# for PRS EUR samples
+PRS_EUR_ID <- read.table("/sc/arion/projects/rg_psychgen/results/PRS/PRStest_Jiayi/PRS_EUR_ID",header=T)
+temp_PRS_EUR_ID <- temp[which(temp$ID %in% PRS_EUR_ID[,1]),] # 4904 ppts
+summary(temp_PRS_EUR_ID$ID_annualKG_count)
+summary(temp_PRS_EUR_ID$yearspan)
+
+# for PRS AFR samples
+PRS_AFR_ID <- read.table("/sc/arion/projects/rg_psychgen/results/PRS/PRStest_Jiayi/PRS_AFR_ID",header=T)
+temp_PRS_AFR_ID <- temp[which(temp$ID %in% PRS_AFR_ID[,1]),] # 3799 ppts
+summary(temp_PRS_AFR_ID$ID_annualKG_count)
+summary(temp_PRS_AFR_ID$yearspan)
+
+# for PRS HA samples
+PRS_HA_ID <- read.table("/sc/arion/projects/rg_psychgen/results/PRS/PRStest_Jiayi/PRS_HA_ID",header=T)
+temp_PRS_HA_ID <- temp[which(temp$ID %in% PRS_HA_ID[,1]),] # 3930 ppts
+summary(temp_PRS_HA_ID$ID_annualKG_count)
+summary(temp_PRS_HA_ID$yearspan)
+
+
+
+####################################################################################################################################################################
+### Table 2: The association of anorexia nervosa PRS with weight loss trajectory in the discovery cohort (BioMe Biobank) and the replication cohort (UK Biobank) ###
+####################################################################################################################################################################
+
+
+### BioMe ###
+
+##############
+## Original ##
+##############
+
+plotOR_an_wt_loss_5
+
+# see above for script in the figure section to get plotOR_an_wt_loss_5 
+
+################################
+## conditioned on obesity PRS ##
+################################
+
+# PRSice to get obesity PRS score 
+
+#weight loss 5% (categorical)
+./PRSice.R --prsice PRSice_linux --A1 Allele1 --A2 Allele2 --base obesityI.gwas.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat beta --perm 10000 \
+--beta --pheno weight_loss_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out obese.weight_loss_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10 --print-snp
+
+
+ob_prs_wt_loss_5 <- read.table('obese.weight_loss_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+ob_prs_wt_loss_5 <- ob_prs_wt_loss_5[which(ob_prs_wt_loss_5[,3]=="Yes"),]
+colnames(ob_prs_wt_loss_5)[colnames(ob_prs_wt_loss_5)=="FID"] <- "ID"
+ob_prs_wt_loss_5 <- ob_prs_wt_loss_5[,c(1,4)]
+
+
+colnames(ob_prs_wt_loss_5)[colnames(ob_prs_wt_loss_5)=="PRS"] <- "obese_PRS" #2816 ppts
+test <- merge(an_pheno_prs_wt_loss_5,ob_prs_wt_loss_5,by="ID")
+
+an_wt_loss_5_glm_w_ob_adj <- glm(weight_loss_5 ~ as.factor(decile_prs) + obese_PRS
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=test,family=binomial)
+summary(an_wt_loss_5_glm_w_ob_adj)
+coef_an_wt_loss_5_glm_w_ob_adj <- as.data.frame(exp(coef(an_wt_loss_5_glm_w_ob_adj)))
+CI95_an_wt_loss_5_glm_w_ob_adj <- as.data.frame(exp(confint(an_wt_loss_5_glm_w_ob_adj)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_5_w_ob_adj <- cbind(decile_prs,coef_an_wt_loss_5_glm_w_ob_adj[c(2:10),], CI95_an_wt_loss_5_glm_w_ob_adj[c(2:10),])
+colnames(plotOR_an_wt_loss_5_w_ob_adj)[colnames(plotOR_an_wt_loss_5_w_ob_adj)=="coef_an_wt_loss_5_glm_w_ob_adj[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_5_w_ob_adj)[colnames(plotOR_an_wt_loss_5_w_ob_adj)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_5_w_ob_adj)[colnames(plotOR_an_wt_loss_5_w_ob_adj)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_5_w_ob_adj) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_5_w_ob_adj <- plotOR_an_wt_loss_5_w_ob_adj %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_5_w_ob_adj  <- plotOR_an_wt_loss_5_w_ob_adj[order(plotOR_an_wt_loss_5_w_ob_adj$decile_prs),]
+plotOR_an_wt_loss_5_w_ob_adj
+
+
+###################################
+## conditioned on depression PRS ##
+###################################
+
+# PRSice to get depression PRS score 
+
+#weight loss 5% (categorical)
+./PRSice.R --prsice PRSice_linux --A1 A1 --A2 A2 --base mdd.gwas.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_withinEUR.txt  --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat LogOR --perm 10000 \
+--beta --pheno weight_loss_sens_nonclin_withinEUR.txt --target GSA_EURonly.final.QC  --out mdd.weight_loss_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS --thread 10 --print-snp
+
+
+mdd_prs_wt_loss_5 <- read.table('mdd.weight_loss_sens_nonclin_withinEUR_wo_an_mdd_encounter.PRS.best', header=T)
+mdd_prs_wt_loss_5 <- mdd_prs_wt_loss_5[which(mdd_prs_wt_loss_5[,3]=="Yes"),]
+colnames(mdd_prs_wt_loss_5)[colnames(mdd_prs_wt_loss_5)=="FID"] <- "ID"
+mdd_prs_wt_loss_5 <- mdd_prs_wt_loss_5[,c(1,4)]
+
+
+colnames(mdd_prs_wt_loss_5)[colnames(mdd_prs_wt_loss_5)=="PRS"] <- "mdd_PRS" #2816 ppts
+test <- merge(an_pheno_prs_wt_loss_5,mdd_prs_wt_loss_5,by="ID")
+
+an_wt_loss_5_glm_w_mdd_adj <- glm(weight_loss_5 ~ as.factor(decile_prs) + mdd_PRS
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=test,family=binomial)
+summary(an_wt_loss_5_glm_w_mdd_adj)
+coef_an_wt_loss_5_glm_w_mdd_adj <- as.data.frame(exp(coef(an_wt_loss_5_glm_w_mdd_adj)))
+CI95_an_wt_loss_5_glm_w_mdd_adj <- as.data.frame(exp(confint(an_wt_loss_5_glm_w_mdd_adj)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_5_w_mdd_adj <- cbind(decile_prs,coef_an_wt_loss_5_glm_w_mdd_adj[c(2:10),], CI95_an_wt_loss_5_glm_w_mdd_adj[c(2:10),])
+colnames(plotOR_an_wt_loss_5_w_mdd_adj)[colnames(plotOR_an_wt_loss_5_w_mdd_adj)=="coef_an_wt_loss_5_glm_w_mdd_adj[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_5_w_mdd_adj)[colnames(plotOR_an_wt_loss_5_w_mdd_adj)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_5_w_mdd_adj)[colnames(plotOR_an_wt_loss_5_w_mdd_adj)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_5_w_mdd_adj) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_5_w_mdd_adj <- plotOR_an_wt_loss_5_w_mdd_adj %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_5_w_mdd_adj  <- plotOR_an_wt_loss_5_w_mdd_adj[order(plotOR_an_wt_loss_5_w_mdd_adj$decile_prs),]
+plotOR_an_wt_loss_5_w_mdd_adj
+
+
+#########################################
+## conditioned on smoking and alcohol  ##
+#########################################
+
+cov_eur <- read.table('cov_withinEUR_new.txt', header=T)
+cov_new <- cov_eur[,c(1,14:21)] 
+colnames(cov_new)[colnames(cov_new)=="FID"] <- "ID"
+#some NA values for smoking and alcohol
+
+an_pheno_prs_wt_loss_5_smk_alc <- merge(an_pheno_prs_wt_loss_5,cov_new,by="ID")
+
+an_wt_loss_5_glm_w_smk_alc <- glm(weight_loss_5 ~ as.factor(decile_prs) + as.factor(ever_smoker) + as.factor(alcohol_user)
+                   + first_annualKG_age + age2 + first_annualBMI 
+                   + as.factor(SEX)  + as.factor(cancer) + as.factor(COPD) + as.factor(HIV) + as.factor(hypothyroid) + as.factor(pregnancy)
+                   + as.factor(ESRD) + as.factor(bariatric) 
+                   + PC1 + PC2 + PC3 + PC4 + PC5 + encounter_times, data=an_pheno_prs_wt_loss_5_smk_alc,family=binomial)
+summary(an_wt_loss_5_glm_w_smk_alc)
+coef_an_wt_loss_5_glm_w_smk_alc <- as.data.frame(exp(coef(an_wt_loss_5_glm_w_smk_alc)))
+CI95_an_wt_loss_5_glm_w_smk_alc <- as.data.frame(exp(confint(an_wt_loss_5_glm_w_smk_alc)))
+
+decile_prs <- c(2:10)
+plotOR_an_wt_loss_5_w_smk_alc <- cbind(decile_prs,coef_an_wt_loss_5_glm_w_smk_alc[c(2:10),], CI95_an_wt_loss_5_glm_w_smk_alc[c(2:10),])
+colnames(plotOR_an_wt_loss_5_w_smk_alc)[colnames(plotOR_an_wt_loss_5_w_smk_alc)=="coef_an_wt_loss_5_glm_w_smk_alc[c(2:10), ]"] <- "OR"
+colnames(plotOR_an_wt_loss_5_w_smk_alc)[colnames(plotOR_an_wt_loss_5_w_smk_alc)=="2.5 %"] <- "lowerCI"
+colnames(plotOR_an_wt_loss_5_w_smk_alc)[colnames(plotOR_an_wt_loss_5_w_smk_alc)=="97.5 %"] <- "upperCI"
+rownames(plotOR_an_wt_loss_5_w_smk_alc) <- NULL
+
+library(tidyverse)
+plotOR_an_wt_loss_5_w_smk_alc <- plotOR_an_wt_loss_5_w_smk_alc %>% add_row(decile_prs=1, OR=1, lowerCI=1, upperCI=1)
+plotOR_an_wt_loss_5_w_smk_alc  <- plotOR_an_wt_loss_5_w_smk_alc[order(plotOR_an_wt_loss_5_w_smk_alc$decile_prs),]
+plotOR_an_wt_loss_5_w_smk_alc
+
+
+### UK Biobank ###
+
+###################
+##  Replication  ##
+###################
+
+# path: /sc/arion/projects/rg_psychgen/ukb/weight_trajectories
+
+ml prsice
+ml R/3.5.3
+
+# AN PRS on weight loss
+PRSice  --A1 A1 --A2 A2 --base /sc/arion/projects/rg_psychgen/results/PRS/PRStest_Jiayi/pgcAN2.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_all --cov-factor Sex,Batch --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat BETA --perm 10000 \
+--beta --pheno weight_loss_5_stable_control --target update.ukb.final.qc  --out weight_loss_5_stable_control_EUR --thread 10 --print-snp
+
+# Obesity PRS on weight loss
+PRSice --A1 Allele1 --A2 Allele2 --base /sc/arion/projects/rg_psychgen/results/PRS/PRStest_Jiayi/obesityI.gwas.QC --binary-target T --clump-kb 250 --clump-p 1 --clump-r2 0.1 \
+--cov-file cov_all --cov-factor Sex,Batch --missing MEAN_IMPUTE --model add --pvalue P --score avg --seed 160275399 --snp SNP --stat beta --perm 10000 \
+--beta --pheno weight_loss_5_stable_control --target update.ukb.final.qc  --out  obese.weight_loss_5_stable_control_EUR --thread 10  --print-snp
+
+
+ml R/3.5.3
+
+# in R
+
+an_prs_5 <- read.table("weight_loss_5_stable_control_EUR.best",header=T)
+obese_prs_5 <- read.table("obese.weight_loss_5_stable_control_EUR.best",header=T)
+ukb_weight_pheno <- read.table("ukb_weight_pheno",header=T)
+cov <- read.table("covariates_baseline_withDEPR_OSTEO_Dx.txt", stringsAsFactors = FALSE, sep="\t",header=TRUE) # 59561 obs
+cov_to_keep <- read.table("cov_all",header=T)
+
+cov <- cov[,c(2,8:17)]
+colnames(ukb_weight_pheno)[colnames(ukb_weight_pheno)=="sampid"] <- "sample_id"
+weight_assoc <- merge(cov, ukb_weight_pheno, by = "sample_id")
+wt_loss_5 <- weight_assoc[,c("sample_id","sample_id","weight_loss_5")]
+colnames(wt_loss_5) <- c("FID","IID","weight_loss_5")
+
+an_prs_5 <- an_prs_5[which(an_prs_5$In_Regression == "Yes"),]
+obese_prs_5 <- obese_prs_5[which(obese_prs_5$In_Regression == "Yes"),]
+
+an_prs_5 <- merge(an_prs_5,cov_to_keep,by=c("FID","IID"))
+obese_prs_5 <- obese_prs_5[,c(1,2,4)]
+
+colnames(obese_prs_5) <- c("FID","IID","obese_prs_5")
+
+an_prs_5 <- merge(an_prs_5,obese_prs_5,by=c("FID","IID"))
+
+an_prs_wt_loss_5 <- merge(an_prs_5,wt_loss_5,by=c("FID","IID")) # 36103 
+
+#  make decile PRS 
+library(StatMeasures)
+an_prs_wt_loss_5$decile_prs <- decile(vector = an_prs_wt_loss_5$PRS, decreasing = FALSE)
+
+only_an_prs_loss_5_glm_decile <- glm(weight_loss_5 ~ as.factor(decile_prs) 
+                   + baseline_age_assessment_center + age2 + first_BMI 
+                   + as.factor(Sex)  + as.factor(Batch)
+                   + PC1 + PC2 + PC3 + PC4 + PC5 , data=an_prs_wt_loss_5,family=binomial)
+summary(only_an_prs_loss_5_glm_decile)
+
+#  confint takes a long time to get 95% CI, therefore calculate OR and 95%CI for top 10% manually
+#                                Estimate Std. Error z value Pr(>|z|)    
+# as.factor(decile_prs)10         0.1590872  0.0533780   2.980  0.00288
+
+
+# OR = exp(0.1590872) = 1.17244
+# lowerCI = exp(0.1590872-1.96*0.0533780) = 1.055977
+# upperCI = exp(0.1590872+1.96*0.0533780) = 1.301748
+
+
+####################################
+##   conditioned on obesity PRS   ##
+####################################
+
+
+an_prs_loss_5_glm_decile <- glm(weight_loss_5 ~ as.factor(decile_prs) + obese_prs_5
+                   + baseline_age_assessment_center + age2 + first_BMI 
+                   + as.factor(Sex)  + as.factor(Batch)
+                   + PC1 + PC2 + PC3 + PC4 + PC5 , data=an_prs_wt_loss_5,family=binomial)
+summary(an_prs_loss_5_glm_decile)
+
+#                                Estimate Std. Error z value Pr(>|z|)    
+as.factor(decile_prs)10         1.582e-01  5.339e-02   2.963 0.003043 ** 
+
+# OR = exp(0.1582) = 1.1714
+# lowerCI = exp(0.1582-1.96*0.05339) = 1.055016
+# upperCI = exp(0.1582+1.96*0.05339) = 1.300624
