@@ -154,7 +154,14 @@ Below is an example of one individual who had 496 weight masures in total and th
 
 ## Reference
 1. Stevens J, Truesdale KP, McClain JE, Cai J. The definition of weight maintenance. International Journal of Obesity 2006; 30: 391–9.
-1. Blair SN, Shaten J, Brownell K, Collins G, Lissner L. Body weight change, all-cause mortality, and cause-specific mortality in the Multiple Risk Factor Intervention Trial. Ann Intern Med 1993; 119: 749–57.
-1. French SA, Folsom AR, Jeffery RW, Zheng W, Mink PJ, Baxter JE. Weight variability and incident disease in older women: the Iowa Women’s Health Study. International Journal of Obesity 1997; 21: 217–23.
+2. Blair SN, Shaten J, Brownell K, Collins G, Lissner L. Body weight change, all-cause mortality, and cause-specific mortality in the Multiple Risk Factor Intervention Trial. Ann Intern Med 1993; 119: 749–57.
+3. French SA, Folsom AR, Jeffery RW, Zheng W, Mink PJ, Baxter JE. Weight variability and incident disease in older women: the Iowa Women’s Health Study. International Journal of Obesity 1997; 21: 217–23.
+
+## Citation
+1. Please cite the reference below if you want to use this method to model your own longitudinal weight trajectory, or longitudinal trajectory of any other quantitative traits!
+
+Xu J, Johnson JS, Signer R, Eating Disorders Working Group of the Psychiatric Genomics Consortium, Birgegård A, Jordan J, Kennedy MA, Landén M, Maguire SL, Martin NG, Mortensen PB, Petersen LV, Thornton LM, Bulik CM, Huckins LM. Exploring the clinical and genetic associations of adult weight trajectories using electronic health records in a racially diverse biobank: a phenome-wide and polygenic risk study. Lancet Digital Health 2022; 4(8):e604-e614.
+   
+
 
 
